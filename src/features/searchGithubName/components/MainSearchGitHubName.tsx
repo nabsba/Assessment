@@ -1,14 +1,15 @@
 import SearchInput from "../../form/components/SearchInput";
 import Header from "./Header";
+import MainListCard from "./listCards/MainListCard";
 import Menus from "./Menus";
 
 export default function MainSearchGitHubName() {
   return (
     <div>
-         <Header />
+          <Header />
           <SearchInput />
           <Menus />
-
+          <MainListCard /> 
     </div>
   )
 }
