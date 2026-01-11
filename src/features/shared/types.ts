@@ -1,6 +1,7 @@
 import type { ErrorComponentProps } from "../error/types";
 import type { LoaderProps } from "../loader/types";
-
+import type { ICON_MAP, ICON_SIZES } from "./data/icons";
+export type IconSize = keyof typeof ICON_SIZES;
 interface DataFetchingWrapperProps {
     isLoading: boolean;
     isError?: boolean;
@@ -22,4 +23,18 @@ interface DataFetchingWrapperProps {
 
 }
 
-export type { DataFetchingWrapperProps };
+export type IconName = keyof typeof ICON_MAP;
+interface IconActionProps {
+    icon: IconName;
+    onClick?: () => void;
+    size?: IconSize;
+    className?: string;
+    color?: string;
+
+    ariaLabel?: string;
+    disabled?: boolean;
+    tooltip?: string;
+    text?: string;
+}
+
+export type { DataFetchingWrapperProps, IconActionProps };
