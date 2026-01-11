@@ -1,10 +1,7 @@
-import React from 'react'
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 
 import Avatar from './Avatar'
-
-import type { AvatarProps } from '../../types'
 
 // Mock the CSS module
 vi.mock('./avatar.module.css', () => ({
