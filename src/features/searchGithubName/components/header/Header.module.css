@@ -1,0 +1,16 @@
+/* Header.module.css */
+.header {
+text-align: center;
+height: 64px;
+background-color: var(--color-primary);
+display: flex;
+align-items: center;
+justify-content: center;
+
+}
+
+.title {
+  font-weight: bold;
+  color: var(--color-text-primary);
+  text-transform: capitalize;
+}
