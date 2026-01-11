@@ -1,0 +1,17 @@
+.card_search_name {
+  border-radius: 50%;
+  width: 5rem;
+  height: 5rem;
+  background-color: #09a89a;
+  overflow: hidden; /* This is crucial */
+}
+
+.card_search_name img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures image fills the circle without distortion */
+}
+
+.card_search_name span {
+    color: white;
+}
