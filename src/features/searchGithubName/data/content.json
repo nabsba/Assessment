@@ -2,8 +2,26 @@
   "header": {
     "title": "gitHub search"
   },
-    "searchInput": {
-      "placeholder": "Search input"
-    }
-
+  "searchInput": {
+    "placeholder": "Search input"
+  },
+  "card": {
+    "checkbox": {
+      "text": "",
+      "alt": "Select user"
+    },
+    "avatar": {
+      "alt": "Avatar",
+      "defaultText": "Avatar"
+    },
+    "button": {
+      "text": "View profile"
+    },
+    "noResults": "No results found",
+    "selectedCount": "users selected"
+  },
+  "mainListCard": {
+    "title": "Search Results",
+    "emptyState": "No users found. Try a different search."
+  }
 }
