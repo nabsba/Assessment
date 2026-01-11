@@ -2,6 +2,7 @@ import {
   FiCalendar,
   FiChevronLeft,
   FiChevronRight,
+  FiCopy,
   FiGitBranch,
   FiHome,
   FiLink,
@@ -12,35 +13,46 @@ import {
   FiSearch,
   FiSettings,
   FiStar,
+  FiTrash2,
   FiUser,
   FiX,
 } from 'react-icons/fi'
 import { FaGithub, FaGlobe, FaLinkedin, FaTwitter } from 'react-icons/fa'
 
-// Icon mapping object
+import { AiOutlineDelete, AiOutlineCopy } from 'react-icons/ai' // Alternative icons
+
 export const ICON_MAP = {
-    search: FiSearch,
-    user: FiUser,
-    star: FiStar,
-    branch: FiGitBranch,
-    calendar: FiCalendar,
-    location: FiMapPin,
-    email: FiMail,
-    link: FiLink,
-    close: FiX,
-    menu: FiMenu,
-    chevronRight: FiChevronRight,
-    chevronLeft: FiChevronLeft,
-    home: FiHome,
-    settings: FiSettings,
-    logout: FiLogOut,
-    github: FaGithub,
-    twitter: FaTwitter,
-    linkedin: FaLinkedin,
-    globe: FaGlobe,
+  // Navigation
+  search: FiSearch,
+  user: FiUser,
+  home: FiHome,
+  menu: FiMenu,
+  close: FiX,
+  chevronRight: FiChevronRight,
+  chevronLeft: FiChevronLeft,
+
+  // Actions - choose your preferred style
+  star: FiStar,
+  bin: FiTrash2,           // Feather style
+  // bin: AiOutlineDelete, // Ant Design style
+  duplicate: FiCopy,       // Feather style  
+  // duplicate: AiOutlineCopy, // Ant Design style
+  link: FiLink,
+  settings: FiSettings,
+  logout: FiLogOut,
+
+  // Content
+  branch: FiGitBranch,
+  calendar: FiCalendar,
+  location: FiMapPin,
+  email: FiMail,
+
+  // Social
+  github: FaGithub,
+  twitter: FaTwitter,
+  linkedin: FaLinkedin,
+  globe: FaGlobe,
 } as const;
-
-
 
 // Icon sizes
 export const ICON_SIZES = {

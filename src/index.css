@@ -55,7 +55,11 @@ html, body {
   justify-content: center;
   align-items: center;
 }
-
+.flex-space-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 .flex-center-col {
   display: flex;
   flex-direction: column;
