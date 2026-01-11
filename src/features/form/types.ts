@@ -27,3 +27,28 @@ export interface SearchInputProps {
   ariaLabel?: string;
   'data-testid'?: string;
 }
+
+export interface CheckboxProps {
+  /** Whether the checkbox is checked */
+  checked: boolean;
+  /** Callback when checkbox state changes */
+  onChange: (checked: boolean) => void;
+  /** Text label for the checkbox */
+  text?: string;
+  /** Disabled state */
+  disabled?: boolean;
+  /** Additional CSS classes */
+  className?: string;
+  /** Inline styles */
+  style?: React.CSSProperties;
+  /** Checkbox ID for label association */
+  id?: string;
+  /** Checkbox name for forms */
+  name?: string;
+  /** Tooltip text */
+  tooltip?: string;
+  /** Required state */
+  required?: boolean;
+  /** Test ID for testing */
+  'data-testid'?: string;
+}
