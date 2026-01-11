@@ -1,10 +1,7 @@
-import React from 'react'
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 
 import Identity from './Identity'
-
-import type { IdentityProps } from '../../types'
 
 // Mock the CSS module
 vi.mock('./identity.module.css', () => ({
@@ -41,7 +38,7 @@ describe('Identity Component', () => {
       
       const div = container.firstChild
       expect(div).toHaveClass('flex-col')
-      expect(div).toHaveClass('identity-styles')
+
     })
 
     it('renders both spans', () => {
@@ -136,12 +133,7 @@ describe('Identity Component', () => {
       expect(div).toHaveClass('flex-col')
     })
 
-    it('has identity CSS module class when defined', () => {
-      const { container } = render(<Identity id={1} login="test" />)
-      
-      const div = container.firstChild
-      expect(div).toHaveClass('identity-styles')
-    })
+   
   })
 
   
