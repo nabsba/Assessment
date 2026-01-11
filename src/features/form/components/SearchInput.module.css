@@ -1,0 +1,15 @@
+.main-search-GitHubName {
+ background-color: var(--color-secondary);
+ border: none;
+ border-radius: var(--borderRadius-primary);
+ padding: 1rem 5rem 1rem 5rem;
+ text-align: center;
+
+}
+
+.main-search-GitHubName::placeholder {
+    color: #245dcf; 
+    color: var(--color-text-primary);
+    font-weight: bold;
+    font-size: 1rem;
+}

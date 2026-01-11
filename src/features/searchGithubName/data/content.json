@@ -1,5 +1,9 @@
 {
   "header": {
     "title": "gitHub search"
-  }
+  },
+    "searchInput": {
+      "placeholder": "Search input"
+    }
+
 }
