@@ -35,7 +35,7 @@ interface IconActionProps {
     ariaLabel?: string;
     disabled?: boolean;
     tooltip?: string;
-    text?: string;
+    text?: string | React.ReactNode | undefined;
 }
 
 export type { DataFetchingWrapperProps, IconActionProps };

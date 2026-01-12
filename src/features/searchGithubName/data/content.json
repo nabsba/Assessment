@@ -22,7 +22,9 @@
   },
   "menu": {
 
-    "editModeLabel": "Edit"
+    "editModeLabel": "Edit",
+    "indiceSelections": "elements selected",
+    "indiceSelection": "element selected"
   },
   "mainListCard": {
     "title": "Search Results",

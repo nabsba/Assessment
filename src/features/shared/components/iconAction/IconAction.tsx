@@ -32,7 +32,7 @@ export default function IconAction({
     };
 
     // FIX: Add text as fallback for aria-label
-    const buttonAriaLabel = ariaLabel || text || `Icon ${icon}`;
+    const buttonAriaLabel = String(ariaLabel || text || `Icon ${icon}`);
 
     const button = (
         <button

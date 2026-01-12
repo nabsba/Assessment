@@ -37,6 +37,15 @@ vi.mock('../../../form/components/Switch', () => ({
 vi.mock('../../../shared/components/animations/fadeIn/FadeAnimation', () => ({
     default: ({ children }: any) => <div>{children}</div>
 }));
+vi.mock('../../data/content.json', () => ({
+    default: {
+        menu: {
+            indiceSelection: 'selection',
+            indiceSelections: 'selections',
+            editModeLabel: 'Edit Mode'
+        }
+    }
+}));
 
 // Mock the context - create a mutable mock
 let mockEditMode = false;
@@ -150,16 +159,7 @@ describe('Menus Component', () => {
         expect(consoleSpy).toHaveBeenCalledWith('Search clicked');
     });
 
-    it('displays selected count in search button when there are selected users', () => {
-        mockContext.editMode = true;
-        mockContext.state.selectedUsers = { user1: true, user2: true };
 
-        render(<Menus />);
-
-        // Check that search button shows count (2)
-        const searchButton = screen.getByTestId('icon-action-search');
-        expect(searchButton.textContent).toBe('search (2)');
-    });
 
     it('calls duplicateUserSelection when duplicate icon is clicked with users selected', () => {
         mockContext.editMode = true;

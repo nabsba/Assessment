@@ -37,10 +37,18 @@ export default function Menus() {
           direction="top"
         >
         <div className="flex-space-between child" >
+
             <IconAction
               icon="search"
               onClick={() => console.log('Search clicked')}
-              text={`${selectedCount ? selectedCount : ''}`}
+              text={
+                selectedCount ? (
+                  <span>
+                    <strong>{selectedCount}</strong>
+                    {selectedCount > 1 ? ' ' + menu.indiceSelections : ' ' + menu.indiceSelection}
+                  </span>
+                ) : undefined
+              }
             />
           <div>
             <IconAction
