@@ -434,16 +434,13 @@ const handleEditModeChange = () => {
             setState(prev => ({ ...prev, loading: false }));
         }
     }, []);
-    // Ajoutez cette fonction avec les autres useCallback
     const toggleSelectAllUsers = useCallback((selectAll: boolean) => {
         setState(prev => {
             if (selectAll) {
-                // Sélectionner tous les users qui ont un ID numérique
                 const allSelectedUsers: Record<number, boolean> = {};
 
                 Object.values(prev.results).forEach(user => {
-                    // Vérifier que c'est un UserGitHubProfile avec un ID numérique
-                    if (user && typeof user.id === 'number') {
+                    if (user && typeof user.id === 'number' || typeof user.id === 'string') {
                         allSelectedUsers[user.id] = true;
                     }
                 });
