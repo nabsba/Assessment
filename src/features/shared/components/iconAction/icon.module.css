@@ -2,3 +2,14 @@
     background-color: transparent;
     border: none;
 }
+
+.iconAction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.iconAction svg {
+  display: block;
+}
