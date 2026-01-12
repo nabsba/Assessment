@@ -1,0 +1,58 @@
+{
+  "errors": {
+    "default": {
+      "title": "Error",
+      "message": "Something went wrong. Please try again.",
+      "buttonText": "Try Again",
+      "icon": "❌"
+    },
+    "404": {
+      "title": "Not Found",
+      "message": "The requested resource was not found.",
+      "buttonText": "Search Again",
+      "icon": "🔍"
+    },
+    "network": {
+      "title": "Network Error",
+      "message": "Network error. Please check your connection.",
+      "buttonText": "Retry Connection",
+      "icon": "📡"
+    },
+    "500": {
+      "title": "Server Error",
+      "message": "Server error. Please try again later.",
+      "buttonText": "Retry",
+      "icon": "⚙️"
+    },
+    "401": {
+      "title": "Access Denied",
+      "message": "You are not authorized to access this resource.",
+      "buttonText": "Login",
+      "icon": "🔒"
+    },
+    "403": {
+      "title": "Forbidden",
+      "message": "You don't have permission to access this resource.",
+      "buttonText": "Go Back",
+      "icon": "🚫"
+    },
+    "429": {
+      "title": "Rate Limit Exceeded",
+      "message": "Too many requests. Please wait and try again.",
+      "buttonText": "Try Again Later",
+      "icon": "⏱️"
+    },
+    "400": {
+      "title": "Validation Error",
+      "message": "Please check your input and try again.",
+      "buttonText": "Fix Input",
+      "icon": "✏️"
+    },
+    "github_api": {
+      "title": "GitHub API Error",
+      "message": "Failed to fetch data from GitHub. The API might be down.",
+      "buttonText": "Retry",
+      "icon": "🐙"
+    }
+  }
+}

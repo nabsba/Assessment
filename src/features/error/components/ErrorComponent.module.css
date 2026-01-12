@@ -1,0 +1,196 @@
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  border-radius: 12px;
+  background-color: var(--error-bg, #fee);
+  border: 1px solid var(--error-border, #fcc);
+  color: var(--error-text, #c00);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.errorIcon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  line-height: 1;
+}
+
+.errorTitle {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0 0 0.5rem 0;
+  color: inherit;
+}
+
+.errorMessage {
+  font-size: 1rem;
+  margin: 0 0 1.5rem 0;
+  line-height: 1.5;
+  color: inherit;
+  opacity: 0.9;
+}
+
+.retryButton {
+  padding: 0.75rem 1.5rem;
+  background-color: var(--error-button-bg, #c00);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+  font-weight: 500;
+}
+
+.retryButton:hover {
+  background-color: var(--error-button-hover, #a00);
+}
+
+.retryButton:active {
+  transform: translateY(1px);
+}
+
+.retryButton:focus {
+  outline: 2px solid var(--error-focus, #f00);
+  outline-offset: 2px;
+}
+
+/* Specific error type styles */
+.default {
+  --error-bg: #fee;
+  --error-border: #fcc;
+  --error-text: #c00;
+  --error-button-bg: #c00;
+  --error-button-hover: #a00;
+}
+
+.not_found {
+  --error-bg: #eef;
+  --error-border: #ccf;
+  --error-text: #009;
+  --error-button-bg: #009;
+  --error-button-hover: #007;
+}
+
+.network {
+  --error-bg: #ffe;
+  --error-border: #ffc;
+  --error-text: #990;
+  --error-button-bg: #990;
+  --error-button-hover: #770;
+}
+
+.server {
+  --error-bg: #fef;
+  --error-border: #fcf;
+  --error-text: #909;
+  --error-button-bg: #909;
+  --error-button-hover: #707;
+}
+
+.unauthorized {
+  --error-bg: #ffe6e6;
+  --error-border: #ffcccc;
+  --error-text: #cc0000;
+  --error-button-bg: #0066cc;
+  --error-button-hover: #0055aa;
+}
+
+.rate_limit {
+  --error-bg: #fff0e6;
+  --error-border: #ffd9b3;
+  --error-text: #cc6600;
+  --error-button-bg: #cc6600;
+  --error-button-hover: #b35900;
+}
+
+.validation {
+  --error-bg: #f0f8ff;
+  --error-border: #c6e2ff;
+  --error-text: #0066cc;
+  --error-button-bg: #0066cc;
+  --error-button-hover: #0055aa;
+}
+
+.github_api {
+  --error-bg: #f0f0f0;
+  --error-border: #d0d0d0;
+  --error-text: #333;
+  --error-button-bg: #24292e;
+  --error-button-hover: #1a1e22;
+}
+
+/* Status code specific styles */
+[class*="40"], [class*="50"] {
+  /* Any class starting with 40 or 50 (status codes) */
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .errorContainer {
+    padding: 1.5rem;
+    margin: 1rem;
+  }
+
+  .errorIcon {
+    font-size: 2.5rem;
+  }
+
+  .errorTitle {
+    font-size: 1.25rem;
+  }
+
+  .errorMessage {
+    font-size: 0.9rem;
+  }
+
+  .retryButton {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .errorContainer {
+    padding: 1rem;
+  }
+
+  .errorIcon {
+    font-size: 2rem;
+  }
+
+  .errorTitle {
+    font-size: 1.1rem;
+  }
+}
+
+/* Animation for error appearance */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.errorContainer {
+  animation: slideIn 0.3s ease-out;
+}
+
+/* Loading state for retry button */
+.retryButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Focus styles for accessibility */
+.errorContainer:focus-within {
+  box-shadow: 0 0 0 3px rgba(200, 0, 0, 0.1);
+}
