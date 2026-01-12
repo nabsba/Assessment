@@ -18,12 +18,18 @@ import {
   FiX,
 } from 'react-icons/fi'
 import { FaGithub, FaGlobe, FaLinkedin, FaTwitter } from 'react-icons/fa'
+import StackIcon from '../components/icons/StackIcon';
+import { StackIconEmpty } from '../components/icons/StackIconEmpty';
 
-import { AiOutlineDelete, AiOutlineCopy } from 'react-icons/ai' // Alternative icons
+
+// Create a SearchWithBadge component
+
 
 export const ICON_MAP = {
   // Navigation
   search: FiSearch,
+  stackIcon: StackIcon, 
+  stackIconEmpty: StackIconEmpty, 
   user: FiUser,
   home: FiHome,
   menu: FiMenu,
@@ -56,10 +62,9 @@ export const ICON_MAP = {
 
 // Icon sizes
 export const ICON_SIZES = {
-    xs: '16px',
-    sm: '20px',
-    md: '24px',
-    lg: '32px',
-    xl: '40px',
+  xs: '16px',
+  sm: '20px',
+  md: '24px',
+  lg: '32px',
+  xl: '40px',
 } as const;
-
