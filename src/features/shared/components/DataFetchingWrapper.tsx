@@ -15,7 +15,6 @@ const DataFetchingWrapper: React.FC<DataFetchingWrapperProps> = ({
     errorProps,
     loadingComponent,
     loaderProps,
-
     style = { height: '100%' },
     children,
 

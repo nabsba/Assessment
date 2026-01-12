@@ -1,5 +1,6 @@
 import type { ErrorComponentProps } from "../error/types";
-import type { LoaderProps } from "../loader/types";
+import type { LoaderProps } from "../loader/components/Loader";
+
 import type { ICON_MAP, ICON_SIZES } from "./data/icons";
 export type IconSize = keyof typeof ICON_SIZES;
 interface DataFetchingWrapperProps {
