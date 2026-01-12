@@ -20,6 +20,9 @@ export interface ContentConfig {
         noResults: string;
         selectedCount: string;
     };
+    menu: {
+        editModeLabel: string;
+    };
     mainListCard: {
         title: string;
         emptyState: string;

@@ -20,6 +20,10 @@
     "noResults": "No results found",
     "selectedCount": "users selected"
   },
+  "menu": {
+
+    "editModeLabel": "Edit"
+  },
   "mainListCard": {
     "title": "Search Results",
     "emptyState": "No users found. Try a different search."
