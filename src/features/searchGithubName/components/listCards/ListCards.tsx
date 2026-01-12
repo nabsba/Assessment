@@ -11,7 +11,6 @@ export default function ListCard() {
   const { card } = content as ContentConfig;
   const { state, toggleUserSelection } = useSearchContext();
   
-state.selectedUsers
   const handleViewProfile = (userId: number) => {
     console.log(`View profile for user ${userId}`);
   };
