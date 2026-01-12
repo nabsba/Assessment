@@ -7,7 +7,6 @@ import type { ContentConfig } from '../../types/content.types'
 import FadeIn from '../../../shared/components/animations/fadeIn/FadeAnimation';
 export default function Menus() {
   const { state, deleteUserSelection, duplicateUserSelection, editMode, handleEditModeChange } = useSearchContext();
-
   const { menu } = content as ContentConfig;
   const selectedCount = Object.keys(state.selectedUsers).length;
   const hasSelectedUsers = selectedCount > 0;
@@ -41,7 +40,7 @@ export default function Menus() {
             <IconAction
               icon="search"
               onClick={() => console.log('Search clicked')}
-              text={`${selectedCount}`}
+              text={`${selectedCount ? selectedCount : ''}`}
             />
           <div>
             <IconAction
