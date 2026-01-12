@@ -1,10 +1,15 @@
-import IconAction from '../../../shared/components/iconAction/IconAction'
+import IconAction from '../../../shared/components/iconAction/IconAction';
+import { useSearchContext } from '../../hooks/GitHubContext';
 
 export default function Menus() {
+
+  const { state } = useSearchContext();
+
+
   return (
     <div className="flex-space-between">
       <div> 
-        <IconAction icon={"search"} onClick={() => console.log('Search clicked')} text='3 rgeg' />
+        <IconAction icon={"search"} onClick={() => console.log('Search clicked')} text={`${Object.keys(state.selectedUsers).length}`} />
       </div>
       <div>
         {/* Duplicate action */}

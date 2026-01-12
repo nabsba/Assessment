@@ -9,13 +9,9 @@ import { useMemo } from 'react'
 
 export default function ListCard() {
   const { card } = content as ContentConfig;
-  const { state } = useSearchContext();
+  const { state, toggleUserSelection } = useSearchContext();
   
-console.log(state, 'state in ListCard');
-  const handleSelectUser = (userId: number, selected: boolean) => {
-    console.log(`User ${userId} selected: ${selected}`);
-  };
-
+state.selectedUsers
   const handleViewProfile = (userId: number) => {
     console.log(`View profile for user ${userId}`);
   };
@@ -25,6 +21,7 @@ console.log(state, 'state in ListCard');
       ? Object.values(state.results)
       : [];
   }, [state.results]);
+
   if (!state.results || resultsArray.length === 0) {
     return (
       <div className={styles.container}>
@@ -32,6 +29,7 @@ console.log(state, 'state in ListCard');
       </div>
     );
   }
+  console.log(state.selectedUsers)
   return (
     <div className={styles.container}>
       <div className={styles.cardGrid}>
@@ -41,8 +39,8 @@ console.log(state, 'state in ListCard');
             userId={user.id}
             username={user.login}
             avatarSrc={user.avatar_url}
-            isSelected={false}  
-            onSelect={(selected) => handleSelectUser(user.id, selected)}
+            isSelected={Boolean(state.selectedUsers[user.id])}
+            onSelect={() => toggleUserSelection(user.id)}
             onButtonClick={() => handleViewProfile(user.id)}
             buttonText={card.button.text}
             className={styles.cardWrapper}
