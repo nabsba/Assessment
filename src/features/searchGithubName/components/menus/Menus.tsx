@@ -4,6 +4,7 @@ import { useSearchContext } from '../../hooks/GitHubContext';
 import Switch from '../../../form/components/Switch';
 import content from '../../data/content.json'
 import type { ContentConfig } from '../../types/content.types'
+import FadeIn from '../../../shared/components/animations/fadeIn/FadeAnimation';
 export default function Menus() {
   const { state, deleteUserSelection, duplicateUserSelection } = useSearchContext();
   const [editMode, setEditMode] = useState(false);
@@ -28,14 +29,20 @@ export default function Menus() {
       </div>
 
       {editMode && (
-        <div className="flex-space-between child">
-          <div>
+        <FadeIn
+          key={`fade-${editMode}`}
+ 
+          opacityDuration={500}
+          duration={500}
+          opacityDelay={100}
+          direction="top"
+        >
+        <div className="flex-space-between child" >
             <IconAction
               icon="search"
               onClick={() => console.log('Search clicked')}
               text={`${selectedCount}`}
             />
-          </div>
           <div>
             <IconAction
               icon="duplicate"
@@ -49,6 +56,7 @@ export default function Menus() {
             />
           </div>
         </div>
+        </FadeIn>
       )}
     </div>
   );
