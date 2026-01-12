@@ -7,13 +7,14 @@ import Menus from './menus/Menus'
 import type { ContentConfig } from '../types/content.types'
 import DataFetchingWrapper from '../../shared/components/DataFetchingWrapper'
 import { LoaderType } from '../../loader/components/Loader'
+import { ErrorType } from '../../error/components/ErrorComponent'
 export default function MainSearchGitHubName() {
 
   const {  searchInput } = content as ContentConfig;
   return (
     <div>
           <Header />
-      <DataFetchingWrapper isLoading={false} isError={false} loaderProps={{ type: LoaderType.DOTS }} >
+      <DataFetchingWrapper isLoading={false} isError={false} errorProps={{ type: ErrorType.SERVER }} loaderProps={{ type: LoaderType.DOTS }} >
       <div className="flex-center">
           <SearchInput value={""} onChange={function (value: string): void {
        console.log('jhi')
