@@ -24,19 +24,19 @@ export default function Card({
   avatarSize = 90,
 }: CardProps) {
   const { card } = content as ContentConfig;
-  const { state, toggleUserSelection } = useSearchContext();
+  const { state, toggleUserSelection, editMode } = useSearchContext();
 
   const isSelected = Boolean(state.selectedUsers[user.id]);
 
   return (
     <div className={`${styles.card} ${className}`}>
-      <div className={styles.checkboxWrapper}>
+      {editMode  && <div className={styles.checkboxWrapper}>
         <Checkbox
           checked={isSelected}
           onChange={() => toggleUserSelection(user.id)}
           text={card.checkbox.text}
         />
-      </div>
+      </div>}
       <div className={styles.content}>
         <Avatar
           src={user.avatar_url}

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+
 import IconAction from '../../../shared/components/iconAction/IconAction';
 import { useSearchContext } from '../../hooks/GitHubContext';
 import Switch from '../../../form/components/Switch';
@@ -6,8 +6,8 @@ import content from '../../data/content.json'
 import type { ContentConfig } from '../../types/content.types'
 import FadeIn from '../../../shared/components/animations/fadeIn/FadeAnimation';
 export default function Menus() {
-  const { state, deleteUserSelection, duplicateUserSelection } = useSearchContext();
-  const [editMode, setEditMode] = useState(false);
+  const { state, deleteUserSelection, duplicateUserSelection, editMode, handleEditModeChange } = useSearchContext();
+
   const { menu } = content as ContentConfig;
   const selectedCount = Object.keys(state.selectedUsers).length;
   const hasSelectedUsers = selectedCount > 0;
@@ -22,7 +22,7 @@ export default function Menus() {
       }}>
         <Switch
           checked={editMode}
-          onChange={setEditMode}
+          onChange={handleEditModeChange}
           label={menu.editModeLabel}
           data-testid="edit-mode-switch" // Add this
         />

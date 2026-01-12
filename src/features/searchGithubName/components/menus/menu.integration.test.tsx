@@ -34,13 +34,24 @@ vi.mock('../../../form/components/Switch', () => ({
     )
 }));
 
+vi.mock('../../../shared/components/animations/fadeIn/FadeAnimation', () => ({
+    default: ({ children }: any) => <div>{children}</div>
+}));
+
 // Mock the context - create a mutable mock
+let mockEditMode = false;
 const mockContext = {
     state: {
         selectedUsers: {} // Start with empty
     },
     deleteUserSelection: vi.fn(),
-    duplicateUserSelection: vi.fn()
+    duplicateUserSelection: vi.fn(),
+    editMode: mockEditMode,
+    handleEditModeChange: vi.fn((newValue: boolean) => {
+        mockEditMode = newValue;
+        // Update the mock context
+        mockContext.editMode = newValue;
+    })
 };
 
 vi.mock('../../hooks/GitHubContext', () => ({
@@ -60,27 +71,42 @@ describe('Menus Component', () => {
     const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => { });
 
     beforeEach(() => {
-        // Reset mocks before each test
+        // Reset all mocks and state
         vi.clearAllMocks();
+        mockEditMode = false;
+
         // Reset context to default
         mockContext.state.selectedUsers = {};
         mockContext.deleteUserSelection.mockClear();
         mockContext.duplicateUserSelection.mockClear();
+        mockContext.editMode = mockEditMode;
+
+        // Reset the handleEditModeChange mock
+        mockContext.handleEditModeChange.mockImplementation((newValue: boolean) => {
+            mockEditMode = newValue;
+            mockContext.editMode = newValue;
+        });
     });
 
     afterAll(() => {
         consoleSpy.mockRestore();
     });
 
-    it('renders the switch with correct label', () => {
+    it('renders the switch with correct label and checked state from context', () => {
+        // Set editMode to true for this test
+        mockContext.editMode = true;
+
         render(<Menus />);
 
         const switchElement = screen.getByTestId('edit-mode-switch');
         expect(switchElement).toBeInTheDocument();
         expect(switchElement).toHaveAttribute('aria-label', 'Edit Mode');
+        expect(switchElement).toHaveAttribute('aria-checked', 'true');
     });
 
     it('does not show action buttons when edit mode is off', () => {
+        mockContext.editMode = false;
+
         render(<Menus />);
 
         expect(screen.queryByTestId('icon-action-search')).not.toBeInTheDocument();
@@ -88,25 +114,34 @@ describe('Menus Component', () => {
         expect(screen.queryByTestId('icon-action-bin')).not.toBeInTheDocument();
     });
 
-    it('shows action buttons when edit mode is turned on', () => {
+    it('shows action buttons when edit mode is on', () => {
+        mockContext.editMode = true;
+
         render(<Menus />);
 
-        // Turn on edit mode
-        const switchButton = screen.getByTestId('edit-mode-switch');
-        fireEvent.click(switchButton);
-
-        // Action buttons should now be visible
+        // Action buttons should be visible
         expect(screen.getByTestId('icon-action-search')).toBeInTheDocument();
         expect(screen.getByTestId('icon-action-duplicate')).toBeInTheDocument();
         expect(screen.getByTestId('icon-action-bin')).toBeInTheDocument();
     });
 
-    it('calls console.log when search icon is clicked', () => {
+    it('calls handleEditModeChange when switch is clicked', () => {
+        mockContext.editMode = false;
+
         render(<Menus />);
 
-        // Enable edit mode
+        // Click the switch
         const switchButton = screen.getByTestId('edit-mode-switch');
         fireEvent.click(switchButton);
+
+        expect(mockContext.handleEditModeChange).toHaveBeenCalledTimes(1);
+        expect(mockContext.handleEditModeChange).toHaveBeenCalledWith(true);
+    });
+
+    it('calls console.log when search icon is clicked', () => {
+        mockContext.editMode = true;
+
+        render(<Menus />);
 
         // Click search button
         const searchButton = screen.getByTestId('icon-action-search');
@@ -116,14 +151,10 @@ describe('Menus Component', () => {
     });
 
     it('displays selected count in search button when there are selected users', () => {
-        // Set selected users before rendering
+        mockContext.editMode = true;
         mockContext.state.selectedUsers = { user1: true, user2: true };
 
         render(<Menus />);
-
-        // Enable edit mode
-        const switchButton = screen.getByTestId('edit-mode-switch');
-        fireEvent.click(switchButton);
 
         // Check that search button shows count (2)
         const searchButton = screen.getByTestId('icon-action-search');
@@ -131,14 +162,10 @@ describe('Menus Component', () => {
     });
 
     it('calls duplicateUserSelection when duplicate icon is clicked with users selected', () => {
-        // Set selected users
+        mockContext.editMode = true;
         mockContext.state.selectedUsers = { user1: true };
 
         render(<Menus />);
-
-        // Enable edit mode
-        const switchButton = screen.getByTestId('edit-mode-switch');
-        fireEvent.click(switchButton);
 
         // Click duplicate button (should not be disabled)
         const duplicateButton = screen.getByTestId('icon-action-duplicate');
@@ -149,11 +176,10 @@ describe('Menus Component', () => {
     });
 
     it('disables duplicate and bin buttons when no users are selected', () => {
-        render(<Menus />); // Default mock has empty selectedUsers
+        mockContext.editMode = true;
+        mockContext.state.selectedUsers = {};
 
-        // Enable edit mode
-        const switchButton = screen.getByTestId('edit-mode-switch');
-        fireEvent.click(switchButton);
+        render(<Menus />);
 
         // Duplicate and bin buttons should be disabled
         const duplicateButton = screen.getByTestId('icon-action-duplicate');
@@ -164,14 +190,10 @@ describe('Menus Component', () => {
     });
 
     it('calls deleteUserSelection when bin icon is clicked with users selected', () => {
-        // Set selected users
+        mockContext.editMode = true;
         mockContext.state.selectedUsers = { user1: true };
 
         render(<Menus />);
-
-        // Enable edit mode
-        const switchButton = screen.getByTestId('edit-mode-switch');
-        fireEvent.click(switchButton);
 
         // Click bin button
         const binButton = screen.getByTestId('icon-action-bin');
@@ -180,22 +202,26 @@ describe('Menus Component', () => {
         expect(mockContext.deleteUserSelection).toHaveBeenCalledTimes(1);
     });
 
-    it('hides action buttons when edit mode is turned off', () => {
-        render(<Menus />);
+    it('re-renders when editMode changes', () => {
+        const { rerender } = render(<Menus />);
 
-        // Turn edit mode ON
-        const switchButton = screen.getByTestId('edit-mode-switch');
-        fireEvent.click(switchButton);
-
-        // Verify buttons are visible
-        expect(screen.getByTestId('icon-action-search')).toBeInTheDocument();
-
-        // Turn edit mode OFF
-        fireEvent.click(switchButton);
-
-        // Verify buttons are hidden
+        // Initially, editMode is false, so no buttons
         expect(screen.queryByTestId('icon-action-search')).not.toBeInTheDocument();
+
+        // Change the mock to simulate context update
+        mockContext.editMode = true;
+
+        // Re-render with new context value
+        rerender(<Menus />);
+
+        // Now buttons should be visible
+        expect(screen.getByTestId('icon-action-search')).toBeInTheDocument();
     });
 
+    it('uses content from content.json for switch label', () => {
+        render(<Menus />);
 
+        const switchElement = screen.getByTestId('edit-mode-switch');
+        expect(switchElement).toHaveAttribute('aria-label', 'Edit Mode');
+    });
 });

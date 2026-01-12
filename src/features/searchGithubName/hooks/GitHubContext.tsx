@@ -36,6 +36,8 @@ export interface UserGitHubProfile {
 
 interface SearchContextInterface {
     state: SearchState;
+    editMode: boolean;
+    handleEditModeChange: () => void;
     updateQuery: (query: string) => void;
     searchUsers: (query: string) => Promise<void>;
     deleteUserSelection: () => void;
@@ -274,9 +276,12 @@ export const SearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         },
         loading: false,
         error: null,
-        selectedUsers: [],
+        selectedUsers: {},
     });
-
+const [editMode, setEditMode] = useState(false);
+const handleEditModeChange = () => {
+    setEditMode(!editMode);
+}
     const abortControllerRef = useRef<AbortController | null>(null);
 
     const updateQuery = useCallback((query: string) => {
@@ -285,7 +290,7 @@ export const SearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     const searchUsers = useCallback(async (query: string) => {
         if (!query.trim()) {
-            setState(prev => ({ ...prev, results: [], error: null }));
+            setState(prev => ({ ...prev, results: {}, error: null }));
             return;
         }
 
@@ -336,7 +341,7 @@ export const SearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                 ...prev,
                 loading: false,
                 error: error.message || 'Failed to search users',
-                results: [],
+                results: {},
             }));
         }
     }, []);
@@ -419,7 +424,7 @@ export const SearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         });
     }, []);
     const clearResults = useCallback(() => {
-        setState(prev => ({ ...prev, results: [], error: null }));
+        setState(prev => ({ ...prev, results: {}, error: null }));
     }, []);
     const abortSearch = useCallback(() => {
         if (abortControllerRef.current) {
@@ -439,7 +444,9 @@ export const SearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                 clearResults,
                 abortSearch,
                 deleteUserSelection,
-                duplicateUserSelection
+                duplicateUserSelection,
+                editMode,
+                handleEditModeChange
             }}
         >
             {children}
