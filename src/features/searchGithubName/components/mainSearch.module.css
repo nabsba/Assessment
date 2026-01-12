@@ -12,3 +12,38 @@
   margin-top:  var(--space-tertiary);
   margin-bottom: var(--space-tertiary);
 }
+
+.fixedHeader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: white; /* Or your background color */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Optional shadow */
+}
+
+.mainContainer {
+
+  padding-top: 80px; 
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.stickySection {
+  position: sticky;
+  top: 80px; 
+  z-index: 900;
+  background: white; 
+  padding: 1rem 0;
+  margin-bottom: 1rem;
+}
+
+
+.scrollableContent {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 2rem;
+}
