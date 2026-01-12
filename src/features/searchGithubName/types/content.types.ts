@@ -29,5 +29,6 @@ export interface ContentConfig {
     mainListCard: {
         title: string;
         emptyState: string;
+        startState: string;
     };
 }
