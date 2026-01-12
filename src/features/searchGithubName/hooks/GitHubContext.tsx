@@ -38,6 +38,7 @@ interface SearchContextInterface {
     state: SearchState;
     updateQuery: (query: string) => void;
     searchUsers: (query: string) => Promise<void>;
+    deleteUserSelection: () => void;
     toggleUserSelection: (userId: number) => void;
     clearResults: () => void;
     abortSearch: () => void;
@@ -338,6 +339,27 @@ export const SearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             }));
         }
     }, []);
+    const deleteUserSelection = useCallback(() => {
+        setState(prev => {
+            
+            if (Object.keys(prev.selectedUsers).length === 0) {
+                return prev; 
+            }
+
+            const selectedUserIds = Object.keys(prev.selectedUsers);
+            const updatedResults = { ...prev.results };
+
+            selectedUserIds.forEach(id => {
+                delete updatedResults[parseInt(id)];
+            });
+
+            return {
+                ...prev,
+                selectedUsers: {},
+                results: updatedResults,
+            };
+        });
+    }, []);
     const toggleUserSelection = useCallback((userId: number) => {
         setState(prev => {
             const isSelected = prev.selectedUsers[userId];
@@ -377,6 +399,7 @@ export const SearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                 toggleUserSelection,
                 clearResults,
                 abortSearch,
+                deleteUserSelection
             }}
         >
             {children}

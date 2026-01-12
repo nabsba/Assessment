@@ -30,5 +30,4 @@ describe('Menus Component - Integration', () => {
         expect(consoleSpy).toHaveBeenCalledWith('Search clicked')
     })
 
-    // ... autres tests
 })

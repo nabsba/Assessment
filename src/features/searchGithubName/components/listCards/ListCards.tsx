@@ -29,7 +29,7 @@ state.selectedUsers
       </div>
     );
   }
-  console.log(state.selectedUsers)
+
   return (
     <div className={styles.container}>
       <div className={styles.cardGrid}>
