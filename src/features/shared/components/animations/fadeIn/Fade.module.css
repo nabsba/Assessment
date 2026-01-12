@@ -1,0 +1,58 @@
+/* Base fade container */
+.fadeContainer {
+  opacity: 0;
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+  will-change: opacity, transform;
+}
+
+/* Direction presets - hidden states */
+.top { transform: translateY(-30px); }
+.bottom { transform: translateY(30px); }
+.left { transform: translateX(-30px); }
+.right { transform: translateX(30px); }
+
+.topLeft { transform: translate(-30px, -30px); }
+.topRight { transform: translate(30px, -30px); }
+.bottomLeft { transform: translate(-30px, 30px); }
+.bottomRight { transform: translate(30px, 30px); }
+
+.scaleUp { transform: scale(0.8); }
+.scaleDown { transform: scale(1.2); }
+
+.opacityOnly { transform: none; }
+
+/* ✅ Visible state (higher specificity, always wins) */
+.fadeContainer.visible {
+  opacity: 1;
+  transform: translate(0, 0) scale(1);
+}
+
+/* Animation speeds */
+.slow { transition-duration: 0.8s; }
+.medium { transition-duration: 0.5s; }
+.fast { transition-duration: 0.3s; }
+
+/* Distance variations */
+.smallDistance.top { transform: translateY(-10px); }
+.smallDistance.bottom { transform: translateY(10px); }
+.smallDistance.left { transform: translateX(-10px); }
+.smallDistance.right { transform: translateX(10px); }
+.smallDistance.topLeft { transform: translate(-10px, -10px); }
+.smallDistance.topRight { transform: translate(10px, -10px); }
+.smallDistance.bottomLeft { transform: translate(-10px, 10px); }
+.smallDistance.bottomRight { transform: translate(10px, 10px); }
+
+.largeDistance.top { transform: translateY(-50px); }
+.largeDistance.bottom { transform: translateY(50px); }
+.largeDistance.left { transform: translateX(-50px); }
+.largeDistance.right { transform: translateX(50px); }
+.largeDistance.topLeft { transform: translate(-50px, -50px); }
+.largeDistance.topRight { transform: translate(50px, -50px); }
+.largeDistance.bottomLeft { transform: translate(-50px, 50px); }
+.largeDistance.bottomRight { transform: translate(50px, 50px); }
+
+/* Easing functions */
+.easeInOut { transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); }
+.easeOut { transition-timing-function: cubic-bezier(0, 0, 0.2, 1); }
+.easeIn { transition-timing-function: cubic-bezier(0.4, 0, 1, 1); }
+.bounce { transition-timing-function: cubic-bezier(0.68, -0.55, 0.27, 1.55); }
