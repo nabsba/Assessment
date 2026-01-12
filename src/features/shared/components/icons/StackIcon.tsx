@@ -1,4 +1,4 @@
-export default function StackIcon({ size = 32 }: any) {
+export default function StackIcon({ size = 24 }: any) {
     return (
         <svg
             width={size}
