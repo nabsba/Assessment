@@ -3,6 +3,7 @@ import Card from './Card'
 import styles from './MainListCard.module.css'
 import type { ContentConfig } from '../../types/content.types'
 import { useSearchContext, type UserGitHubProfile } from '../../hooks/GitHubContext'
+import { useMemo } from 'react'
 
 
 
@@ -10,7 +11,7 @@ export default function ListCard() {
   const { card } = content as ContentConfig;
   const { state } = useSearchContext();
   
-
+console.log(state, 'state in ListCard');
   const handleSelectUser = (userId: number, selected: boolean) => {
     console.log(`User ${userId} selected: ${selected}`);
   };
@@ -18,18 +19,23 @@ export default function ListCard() {
   const handleViewProfile = (userId: number) => {
     console.log(`View profile for user ${userId}`);
   };
-  if (!state.results || !Array.isArray(state.results) || state.results.length === 0) {
+
+  const resultsArray = useMemo(() => {
+    return state.results
+      ? Object.values(state.results)
+      : [];
+  }, [state.results]);
+  if (!state.results || resultsArray.length === 0) {
     return (
       <div className={styles.container}>
         <p>No users found. Try a different search.</p>
       </div>
     );
   }
-
   return (
     <div className={styles.container}>
       <div className={styles.cardGrid}>
-        {state.results.map((user: UserGitHubProfile) => (
+        {resultsArray.map((user: UserGitHubProfile) => (
           <Card
             key={user.id}
             userId={user.id}

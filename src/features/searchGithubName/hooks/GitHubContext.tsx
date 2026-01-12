@@ -6,7 +6,7 @@ import ENDPOINTS from '../../../api/data/constant';
 
 type SearchState = {
     query: string;
-    results: UserGitHubProfile[];
+    results: Record<number, UserGitHubProfile>; 
     loading: boolean;
     error: string | null;
     selectedUsers: string[]; // For multi-select
@@ -307,12 +307,24 @@ export const SearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                 }
             );
 
-            setState(prev => ({
-                ...prev,
-                results: response.data.items || [],
-                loading: false,
-                error: null,
-            }));
+            setState(prev => {
+                const items = response.data.items || [];
+                const resultsMap: Record<number, UserGitHubProfile> = {};
+                const resultsOrder: number[] = [];
+
+                items.forEach((user: UserGitHubProfile) => {
+                    resultsMap[user.id] = user;
+                    resultsOrder.push(user.id);
+                });
+
+                return {
+                    ...prev,
+                    results: resultsMap,
+                    resultsOrder: resultsOrder,
+                    loading: false,
+                    error: null,
+                };
+            });
         } catch (error: any) {
             if (error.name === 'AbortError') {
                 return;
