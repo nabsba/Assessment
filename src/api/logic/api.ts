@@ -90,21 +90,21 @@ export class ApiService {
         return this.request<T>(url, { ...config, method: 'GET' });
     }
 
-    post<T = any>(url: string, body?: any, config?: Omit<ApiConfig, 'method' | 'body'>) {
-        return this.request<T>(url, { ...config, method: 'POST', body });
-    }
+    // post<T = any>(url: string, body?: any, config?: Omit<ApiConfig, 'method' | 'body'>) {
+    //     return this.request<T>(url, { ...config, method: 'POST', body });
+    // }
 
-    put<T = any>(url: string, body?: any, config?: Omit<ApiConfig, 'method' | 'body'>) {
-        return this.request<T>(url, { ...config, method: 'PUT', body });
-    }
+    // put<T = any>(url: string, body?: any, config?: Omit<ApiConfig, 'method' | 'body'>) {
+    //     return this.request<T>(url, { ...config, method: 'PUT', body });
+    // }
 
-    patch<T = any>(url: string, body?: any, config?: Omit<ApiConfig, 'method' | 'body'>) {
-        return this.request<T>(url, { ...config, method: 'PATCH', body });
-    }
+    // patch<T = any>(url: string, body?: any, config?: Omit<ApiConfig, 'method' | 'body'>) {
+    //     return this.request<T>(url, { ...config, method: 'PATCH', body });
+    // }
 
-    delete<T = any>(url: string, config?: Omit<ApiConfig, 'method'>) {
-        return this.request<T>(url, { ...config, method: 'DELETE' });
-    }
+    // delete<T = any>(url: string, config?: Omit<ApiConfig, 'method'>) {
+    //     return this.request<T>(url, { ...config, method: 'DELETE' });
+    // }
 
     head<T = any>(url: string, config?: Omit<ApiConfig, 'method'>) {
         return this.request<T>(url, { ...config, method: 'HEAD' });
