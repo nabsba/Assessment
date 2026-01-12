@@ -3,74 +3,52 @@ import Avatar from '../../../shared/components/avatar/Avatar'
 import Identity from '../../../shared/components/identity/Identity'
 import content from '../../data/content.json'
 import styles from './Card.module.css'
-
 import ButtonV1 from '../../../shared/components/buttons/ButtonV1'
 import type { ContentConfig } from '../../types/content.types'
+import type { UserGitHubProfile } from '../../hooks/GitHubContext'
+import { useSearchContext } from '../../hooks/GitHubContext'
 
 interface CardProps {
-  isSelected?: boolean;
-  onSelect?: (checked: boolean) => void;
-  avatarSrc?: string;
-  avatarAlt?: string;
-  avatarSize?: number;
-  userId: number | string;
-  username: string;
+  user: UserGitHubProfile;
+  onButtonClick: (userId: number) => void;
   buttonText?: string;
-  onButtonClick?: () => void;
   className?: string;
+  avatarSize?: number;
 }
 
-
 export default function Card({
-  isSelected = false,
-  onSelect,
-  avatarSrc = '',
-  avatarAlt,
-  avatarSize = 90,
-  userId,
-  username,
-  buttonText,
+  user,
   onButtonClick,
+  buttonText,
   className = '',
+  avatarSize = 90,
 }: CardProps) {
   const { card } = content as ContentConfig;
+  const { state, toggleUserSelection } = useSearchContext();
 
-  const handleCheckboxChange = () => {
-    if (onSelect) {
-      onSelect(!isSelected);
-    }
-  };
-
-  const handleButtonClick = () => {
-    if (onButtonClick) {
-      onButtonClick();
-    }
-  };
+  const isSelected = Boolean(state.selectedUsers[user.id]);
 
   return (
     <div className={`${styles.card} ${className}`}>
-
       <div className={styles.checkboxWrapper}>
         <Checkbox
           checked={isSelected}
-          onChange={handleCheckboxChange}
+          onChange={() => toggleUserSelection(user.id)}
           text={card.checkbox.text}
         />
       </div>
-
-
       <div className={styles.content}>
         <Avatar
-          src={avatarSrc}
-          alt={avatarAlt || card.avatar.alt}
-          text={ card.avatar.defaultText}
+          src={user.avatar_url}
+          alt={card.avatar.alt}
+          text={card.avatar.defaultText}
           size={avatarSize}
           className="card_search_name"
         />
-        <Identity id={userId} login={username} />
+        <Identity id={user.id} login={user.login} />
         <ButtonV1
           text={buttonText || card.button.text}
-          onClick={handleButtonClick}
+          onClick={() => onButtonClick(user.id)}
           className="primary-btn"
         />
       </div>
