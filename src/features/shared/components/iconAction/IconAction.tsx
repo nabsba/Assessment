@@ -14,13 +14,12 @@ export default function IconAction({
     disabled = false,
     tooltip,
     text
-
 }: IconActionProps) {
     const IconComponent = ICON_MAP[icon];
     if (!IconComponent) {
-        console.warn(`Icon "${icon}" not found in ICON_MAP`);
         return null;
     }
+    const isClickable = !!onClick && !disabled; 
 
     const iconSize = ICON_SIZES[size];
 
@@ -38,8 +37,13 @@ export default function IconAction({
         <button
             onClick={handleClick}
             style={{ fontSize: iconSize }}
-            className={`${styles.iconAction} ${className}`}
-            aria-label={buttonAriaLabel}  // Use the computed aria-label
+            className={`
+    ${styles.iconAction}
+    ${isClickable ? styles.clickable : ""}
+    ${disabled ? styles.disabled : ""}
+    ${className}
+  `}
+            aria-label={buttonAriaLabel}
             disabled={disabled}
             title={tooltip}
         >

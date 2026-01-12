@@ -13,3 +13,30 @@
 .iconAction svg {
   display: block;
 }
+
+.iconAction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  cursor: default;
+}
+
+.iconAction {
+  cursor: default;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.iconAction svg {
+  stroke: currentColor;
+  fill: none;
+}
+
+.disabled {
+  color: #C4C4C4;
+}
