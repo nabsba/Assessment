@@ -4,7 +4,8 @@ import { useSearchContext } from '../../hooks/GitHubContext';
 export default function Menus() {
 
   const { state, deleteUserSelection, duplicateUserSelection } = useSearchContext();
-
+  const selectedCount = Object.keys(state.selectedUsers).length;
+  const hasSelectedUsers = selectedCount > 0;
 
   return (
     <div className="flex-space-between">
@@ -15,12 +16,14 @@ export default function Menus() {
         <IconAction
           icon="duplicate"  
           onClick={duplicateUserSelection}
+          disabled={!hasSelectedUsers}
         />
 
       
         <IconAction
           icon="bin" 
           onClick={deleteUserSelection}
+          disabled={!hasSelectedUsers}
         />
 
       </div>
