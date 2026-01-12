@@ -1,0 +1,14 @@
+.mainContainer {
+    max-width: 1500px;
+    margin:auto;
+    padding-left:var(--space-primary);
+    padding-right:var(--space-primary);
+}
+.searchContainer { 
+  margin-top: var(--space-primary);
+}
+
+.menusContainer {
+  margin-top:  var(--space-tertiary);
+  margin-bottom: var(--space-tertiary);
+}

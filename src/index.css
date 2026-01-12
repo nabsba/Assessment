@@ -16,6 +16,11 @@
 
   /* Border radius */
   --borderRadius-primary: 5px;
+
+    /* Border radius */
+  --space-primary: 1.5rem;
+  --space-secondary: 2.5rem;
+  --space-tertiary: 3.5rem;
 }
 
 html, body {

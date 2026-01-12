@@ -28,7 +28,7 @@ export default function ListCard() {
   }
 
   return (
-    <div className={styles.container}>
+
       <div className={styles.cardGrid}>
         {resultsArray.map((user: UserGitHubProfile) => (
           <Card
@@ -40,6 +40,6 @@ export default function ListCard() {
           />
         ))}
       </div>
-    </div>
+
   )
 }

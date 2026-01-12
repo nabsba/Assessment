@@ -5,6 +5,7 @@ import Switch from '../../../form/components/Switch';
 import content from '../../data/content.json'
 import type { ContentConfig } from '../../types/content.types'
 import FadeIn from '../../../shared/components/animations/fadeIn/FadeAnimation';
+import styles from './menu.module.css';
 export default function Menus() {
   const { state, deleteUserSelection, duplicateUserSelection, editMode, handleEditModeChange, toggleSelectAllUsers } = useSearchContext();
   const { menu } = content as ContentConfig;
@@ -30,7 +31,6 @@ export default function Menus() {
       {editMode && (
         <FadeIn
           key={`fade-${editMode}`}
- 
           opacityDuration={500}
           duration={500}
           opacityDelay={100}
@@ -43,6 +43,7 @@ export default function Menus() {
               text={`${selectedCount ? selectedCount + (selectedCount > 1 ? ' ' + menu.indiceSelections : ' ' + menu.indiceSelection) : menu.selectAll}`}
             />
           <div>
+            <div className={styles.wrapper_icons_right}> 
             <IconAction
               icon="duplicate"
               onClick={duplicateUserSelection}
@@ -53,6 +54,7 @@ export default function Menus() {
               onClick={deleteUserSelection}
               disabled={!hasSelectedUsers}
             />
+            </div>
           </div>
         </div>
         </FadeIn>
