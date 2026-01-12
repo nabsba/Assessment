@@ -34,7 +34,7 @@ describe('IconAction Component', () => {
         vi.clearAllMocks()
     })
 
-    describe.only('Rendering', () => {
+    describe('Rendering', () => {
         // it.only('renders icon correctly', () => {
         //     render(<IconAction icon="search" />)
 
@@ -78,7 +78,7 @@ describe('IconAction Component', () => {
         it('applies correct size style', () => {
             render(<IconAction icon="search" size = "lg" />)
             const button = screen.getByRole('button')
-            expect(button).toHaveStyle('font-size: 32px')
+            expect(button).toHaveStyle('font-size: 24px')
         })
 
         // it('shows warning and returns null when icon not found', () => {

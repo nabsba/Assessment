@@ -3,7 +3,7 @@ type StackLinesIconProps = {
     color?: string;
 };
 
-export function StackIconEmpty({ size = 32 }: StackLinesIconProps) {
+export function StackIconEmpty({ size = 24 }: StackLinesIconProps) {
     return (
         <svg
             width={size}
