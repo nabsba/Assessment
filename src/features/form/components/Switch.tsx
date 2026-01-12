@@ -16,7 +16,6 @@ const Switch: React.FC<SwitchProps> = ({
     disabled = false,
     label = '',
     size = 'medium',
-    color = '#4CAF50',
 }) => {
     const [isChecked, setIsChecked] = useState(checked);
 
@@ -62,10 +61,8 @@ const Switch: React.FC<SwitchProps> = ({
         <div className={containerClass}>
             <button
                 type="button"
-                className={trackClass}
-                style={{
-                    backgroundColor: isChecked ? color : '#ccc',
-                }}
+                className={trackClass + " " +  (isChecked ? styles.checked : '')}
+              
                 onClick={handleToggle}
                 disabled={disabled}
                 role="switch"

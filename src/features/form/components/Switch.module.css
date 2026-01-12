@@ -20,8 +20,11 @@
   transition: background-color 0.2s;
   overflow: hidden; /* Prevent overflow */
   min-width: 0; /* Ensure proper sizing */
+  
 }
-
+.checked {
+  background-color: var(--color-tertiary);
+}
 /* Size variants with proper widths */
 .track.small {
   width: 40px;  /* Increased from likely 32px */

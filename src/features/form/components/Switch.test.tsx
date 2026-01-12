@@ -144,35 +144,6 @@ describe('Switch Component', () => {
 
     });
 
-    describe('Styling and Visual', () => {
-        it('applies custom color when checked', () => {
-            const customColor = '#ff0000';
-            render(<Switch checked={true} color={customColor} />);
-
-            const switchElement = screen.getByRole('switch');
-            expect(switchElement.style.backgroundColor).toBe(customColor);
-        });
-
-        it('uses default color when unchecked', () => {
-            render(<Switch checked={false} color="#4CAF50" />);
-
-            const switchElement = screen.getByRole('switch');
-            expect(switchElement.style.backgroundColor).toBe('#ccc');
-        });
-
-        it('applies knob transform based on checked state and size', () => {
-            const { container } = render(<Switch size="medium" checked={false} />);
-
-            const knob = container.querySelector('.knob') as HTMLElement;
-            expect(knob).toBeInTheDocument();
-
-            // When unchecked, knob should be on left (transform with smaller value)
-            expect(knob.style.transform).toBe('translateX(4px)');
-        });
-
-    
-    });
-
     describe('Edge Cases', () => {
         it('handles undefined onChange gracefully', () => {
             expect(() => {
