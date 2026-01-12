@@ -45,6 +45,7 @@ interface SearchContextInterface {
     clearResults: () => void;
     abortSearch: () => void;
     duplicateUserSelection: () => void;
+    toggleSelectAllUsers: (selectAll: boolean) => void;
 }
 
 const SearchContext = createContext<SearchContextInterface | undefined>(undefined);
@@ -433,7 +434,33 @@ const handleEditModeChange = () => {
             setState(prev => ({ ...prev, loading: false }));
         }
     }, []);
+    // Ajoutez cette fonction avec les autres useCallback
+    const toggleSelectAllUsers = useCallback((selectAll: boolean) => {
+        setState(prev => {
+            if (selectAll) {
+                // Sélectionner tous les users qui ont un ID numérique
+                const allSelectedUsers: Record<number, boolean> = {};
 
+                Object.values(prev.results).forEach(user => {
+                    // Vérifier que c'est un UserGitHubProfile avec un ID numérique
+                    if (user && typeof user.id === 'number') {
+                        allSelectedUsers[user.id] = true;
+                    }
+                });
+
+                return {
+                    ...prev,
+                    selectedUsers: allSelectedUsers,
+                };
+            } else {
+                // Désélectionner tous
+                return {
+                    ...prev,
+                    selectedUsers: {},
+                };
+            }
+        });
+    }, []);
     return (
         <SearchContext.Provider
             value={{
@@ -445,6 +472,7 @@ const handleEditModeChange = () => {
                 abortSearch,
                 deleteUserSelection,
                 duplicateUserSelection,
+                toggleSelectAllUsers,
                 editMode,
                 handleEditModeChange
             }}

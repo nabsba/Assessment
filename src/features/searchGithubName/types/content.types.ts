@@ -24,6 +24,7 @@ export interface ContentConfig {
         editModeLabel: string;
         indiceSelections: string;
         indiceSelection: string;
+        selectAll: string;
     };
     mainListCard: {
         title: string;

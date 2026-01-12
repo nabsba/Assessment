@@ -21,10 +21,10 @@
     "selectedCount": "users selected"
   },
   "menu": {
-
     "editModeLabel": "Edit",
     "indiceSelections": "elements selected",
-    "indiceSelection": "element selected"
+    "indiceSelection": "element selected",
+    "selectAll": "Select All"
   },
   "mainListCard": {
     "title": "Search Results",

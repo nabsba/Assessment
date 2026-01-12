@@ -141,17 +141,7 @@ describe("Menus Component", () => {
         expect(mockContext.handleEditModeChange).toHaveBeenCalledWith(true);
     });
 
-    it("calls console.log when stack icon is clicked", () => {
-        mockContext.editMode = true;
-        mockContext.state.selectedUsers = { user1: true };
-
-        render(<Menus />);
-
-        const stackButton = screen.getByTestId("icon-action-stackIcon");
-        fireEvent.click(stackButton);
-
-        expect(consoleSpy).toHaveBeenCalledWith("Search clicked");
-    });
+   
 
     it("calls duplicateUserSelection when duplicate icon is clicked with users selected", () => {
         mockContext.editMode = true;

@@ -6,7 +6,7 @@ import content from '../../data/content.json'
 import type { ContentConfig } from '../../types/content.types'
 import FadeIn from '../../../shared/components/animations/fadeIn/FadeAnimation';
 export default function Menus() {
-  const { state, deleteUserSelection, duplicateUserSelection, editMode, handleEditModeChange } = useSearchContext();
+  const { state, deleteUserSelection, duplicateUserSelection, editMode, handleEditModeChange, toggleSelectAllUsers } = useSearchContext();
   const { menu } = content as ContentConfig;
   const selectedCount = Object.keys(state.selectedUsers).length;
   const hasSelectedUsers = selectedCount > 0;
@@ -39,8 +39,8 @@ export default function Menus() {
         <div className="flex-space-between child" >
             <IconAction
               icon={hasSelectedUsers ? "stackIcon" : "stackIconEmpty"}
-              onClick={() => console.log('Search clicked')}
-              text={`${selectedCount ? selectedCount + (selectedCount > 1 ? ' ' + menu.indiceSelections : ' ' + menu.indiceSelection) : ''}`}
+              onClick={() => toggleSelectAllUsers(!hasSelectedUsers)}
+              text={`${selectedCount ? selectedCount + (selectedCount > 1 ? ' ' + menu.indiceSelections : ' ' + menu.indiceSelection) : menu.selectAll}`}
             />
           <div>
             <IconAction
