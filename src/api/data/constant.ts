@@ -1,6 +1,6 @@
 const ENDPOINTS = {
   GITHUB: {
-    SEARCH_USER: 'https://api.github.com/search/users?q=',
+    SEARCH_USER: 'https://api.github.com/search/',
   },
 };
 

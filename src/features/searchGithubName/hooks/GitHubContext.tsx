@@ -84,7 +84,7 @@ const handleEditModeChange = () => {
 
         try {
             const response = await apiService.get(
-                `${ENDPOINTS.GITHUB.SEARCH_USER}${encodeURIComponent(query)}&per_page=10`,
+                `${ENDPOINTS.GITHUB.SEARCH_USER}users?q=${encodeURIComponent(query)}&per_page=30`,
                 {
                     headers: {
                         'Accept': 'application/vnd.github.v3+json',
