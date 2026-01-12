@@ -6,7 +6,7 @@ import ENDPOINTS from '../../../api/data/constant';
 
 type SearchState = {
     query: string;
-    results: Record<number, UserGitHubProfile>; 
+    results: Record<number|string, UserGitHubProfile>;
     loading: boolean;
     error: string | null;
     selectedUsers: Record<number, boolean>; // For multi-select
@@ -42,6 +42,7 @@ interface SearchContextInterface {
     toggleUserSelection: (userId: number) => void;
     clearResults: () => void;
     abortSearch: () => void;
+    duplicateUserSelection: () => void;
 }
 
 const SearchContext = createContext<SearchContextInterface | undefined>(undefined);
@@ -341,21 +342,61 @@ export const SearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }, []);
     const deleteUserSelection = useCallback(() => {
         setState(prev => {
-            
             if (Object.keys(prev.selectedUsers).length === 0) {
-                return prev; 
+                return prev;
             }
 
             const selectedUserIds = Object.keys(prev.selectedUsers);
             const updatedResults = { ...prev.results };
 
             selectedUserIds.forEach(id => {
-                delete updatedResults[parseInt(id)];
+                // Don't use parseInt() - delete by the actual ID (which could be string like "1_copy")
+                delete updatedResults[id];
             });
 
             return {
                 ...prev,
                 selectedUsers: {},
+                results: updatedResults,
+            };
+        });
+    }, []);
+    const duplicateUserSelection = useCallback(() => {
+        setState(prev => {
+            if (Object.keys(prev.selectedUsers).length === 0) {
+                return prev;
+            }
+
+            const selectedUserIds = Object.keys(prev.selectedUsers);
+            const updatedResults = { ...prev.results };
+
+            selectedUserIds.forEach(id => {
+                const originalUser = prev.results[parseInt(id)];
+                if (originalUser) {
+                    // Check if duplicate already exists
+                    const duplicateId = `${originalUser.id}_copy`;
+
+                    if (updatedResults[duplicateId]) {
+                        console.log(`Duplicate ${duplicateId} already exists, skipping`);
+                        return; // Skip - duplicate already exists
+                    }
+
+                    // Create duplicate with ID like "1_copy"
+                    const duplicate = {
+                        ...originalUser,
+                        id: duplicateId, // String ID: "1_copy"
+                        login: `${originalUser.login}`,
+                        isDuplicate: true,
+                        originalId: originalUser.id,
+                    };
+
+                    // Add the duplicate
+                    updatedResults[duplicateId] = duplicate;
+                }
+            });
+
+            return {
+                ...prev,
                 results: updatedResults,
             };
         });
@@ -377,11 +418,9 @@ export const SearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             };
         });
     }, []);
-
     const clearResults = useCallback(() => {
         setState(prev => ({ ...prev, results: [], error: null }));
     }, []);
-
     const abortSearch = useCallback(() => {
         if (abortControllerRef.current) {
             abortControllerRef.current.abort();
@@ -399,7 +438,8 @@ export const SearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                 toggleUserSelection,
                 clearResults,
                 abortSearch,
-                deleteUserSelection
+                deleteUserSelection,
+                duplicateUserSelection
             }}
         >
             {children}

@@ -3,7 +3,7 @@ import { useSearchContext } from '../../hooks/GitHubContext';
 
 export default function Menus() {
 
-  const { state, deleteUserSelection } = useSearchContext();
+  const { state, deleteUserSelection, duplicateUserSelection } = useSearchContext();
 
 
   return (
@@ -14,7 +14,7 @@ export default function Menus() {
       <div>
         <IconAction
           icon="duplicate"  
-          onClick={() => console.log('duplicateItem')}
+          onClick={duplicateUserSelection}
         />
 
       
