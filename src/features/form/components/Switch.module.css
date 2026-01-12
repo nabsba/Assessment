@@ -1,0 +1,79 @@
+/* Switch.module.css */
+
+.container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  user-select: none;
+}
+
+/* Track/Button - Make it wider */
+.track {
+  position: relative;
+  border: none;
+  cursor: pointer;
+  padding: 2px;
+  border-radius: 100px;
+  background-color: #ccc;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.2s;
+  overflow: hidden; /* Prevent overflow */
+  min-width: 0; /* Ensure proper sizing */
+}
+
+/* Size variants with proper widths */
+.track.small {
+  width: 40px;  /* Increased from likely 32px */
+  height: 20px;
+}
+
+.track.medium {
+  width: 56px;  /* Increased from likely 48px */
+  height: 28px;
+}
+
+.track.large {
+  width: 72px;  /* Increased from likely 60px */
+  height: 36px;
+}
+
+/* Knob */
+.knob {
+  position: absolute;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Knob sizes - adjusted for new track widths */
+.knob_small {
+  width: 16px;
+  height: 16px;
+}
+
+.knob_medium {
+  width: 24px;
+  height: 24px;
+}
+
+.knob_large {
+  width: 32px;
+  height: 32px;
+}
+
+/* Disabled states */
+.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.disabledTrack {
+  cursor: not-allowed;
+}
+
+.label {
+  font-size: 14px;
+  color: #333;
+}
