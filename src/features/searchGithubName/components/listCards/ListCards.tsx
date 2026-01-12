@@ -8,7 +8,7 @@ import { useMemo } from 'react'
 
 
 export default function ListCard() {
-  const { card } = content as ContentConfig;
+  const { card, mainListCard } = content as ContentConfig;
   const { state, toggleUserSelection } = useSearchContext();
   
   const handleViewProfile = (userId: number) => {
@@ -24,7 +24,7 @@ export default function ListCard() {
   if (!state.results || resultsArray.length === 0) {
     return (
       <div className={styles.container}>
-        <p>No users found. Try a different search.</p>
+        <p>{mainListCard.emptyState}</p>
       </div>
     );
   }
