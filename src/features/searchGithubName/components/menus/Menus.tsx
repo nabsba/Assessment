@@ -6,12 +6,13 @@ import content from '../../data/content.json'
 import type { ContentConfig } from '../../types/content.types'
 import FadeIn from '../../../shared/components/animations/fadeIn/FadeAnimation';
 import styles from './menu.module.css';
+import { useEditModeContext } from '../../hooks/EditContext';
 export default function Menus() {
-  const { state, deleteUserSelection, duplicateUserSelection, editMode, handleEditModeChange, toggleSelectAllUsers } = useSearchContext();
+  const { state, deleteUserSelection, duplicateUserSelection, toggleSelectAllUsers } = useSearchContext();
   const { menu } = content as ContentConfig;
   const selectedCount = Object.keys(state.selectedUsers).length;
   const hasSelectedUsers = selectedCount > 0;
-
+  const { editMode, toggleEditMode  } = useEditModeContext();
   return (
     <div>
       <div style={{
@@ -22,7 +23,7 @@ export default function Menus() {
       }}>
         {state.resultsOrder && state.resultsOrder.length > 0 &&  <Switch
           checked={editMode}
-          onChange={handleEditModeChange}
+          onChange={toggleEditMode}
           label={menu.editModeLabel}
           data-testid="edit-mode-switch" // Add this
         />}
