@@ -42,7 +42,7 @@ export default function Menus() {
               onClick={() => toggleSelectAllUsers(!hasSelectedUsers)}
               text={
                 <p>
-                  <strong>{selectedCount > 1 ? selectedCount : ''}</strong>
+                  <strong>{selectedCount >= 1 ? selectedCount : ''}</strong>
                   {selectedCount
                     ? ` ${selectedCount > 1 ? menu.indiceSelections : menu.indiceSelection}`
                     : ` ${menu.selectAll}`}
