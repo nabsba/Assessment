@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+// ListCards.tsx
+import { useCallback, useEffect, useRef } from 'react'
 import content from '../../data/content.json'
 import { useSearchContext } from '../../hooks/GitHubContext'
 import type { ContentConfig } from '../../types/content.types'
@@ -6,22 +7,19 @@ import Card from './Card'
 import styles from './MainListCard.module.css'
 
 export default function ListCard() {
-  const { card, mainListCard,  } = content as ContentConfig;
+  const { card } = content as ContentConfig;
   const { state, searchUsers, showNotification } = useSearchContext();
-  const [isFirstVisit, setIsFirstVisit] = useState(true);
 
   const lastCardRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
 
-  const resultsArray = state.resultsOrder || []; // ids
+  const resultsArray = state.resultsOrder || [];
 
   const handleEndReached = useCallback(() => {
     const { query, pagination, loading, apiLimitations } = state;
 
- 
     if (apiLimitations.remaining === 0) {
       showNotification(content.searchInput.notifications.rateLimitExceeded, 6000);
-      return;
     }
 
     if (state.apiLimitations.remaining && state.apiLimitations.remaining <= 2) {
@@ -50,20 +48,6 @@ export default function ListCard() {
     return () => observerRef.current?.disconnect();
   }, [resultsArray.length, handleEndReached]);
 
-  useEffect(() => {
-    if (state.results && Object.keys(state.results).length > 0) {
-      setIsFirstVisit(false);
-    }
-  }, [state.results]);
-
-  if (!state.results || resultsArray.length === 0) {
-    return (
-      <div className={styles.container}>
-        <p>{isFirstVisit ? mainListCard.startState : mainListCard.emptyState}</p>
-      </div>
-    );
-  }
-
   return (
     <div className={styles.container}>
       <div className={styles.cardGrid}>
@@ -71,7 +55,7 @@ export default function ListCard() {
           const isLastCard = index === resultsArray.length - 1;
 
           const user = state.results?.[String(userId)];
-          if (!user) return null; 
+          if (!user) return null;
 
           return (
             <div
