@@ -44,7 +44,7 @@ describe('Identity Component', () => {
     it('renders both spans', () => {
       render(<Identity id={1} login="test" />)
       
-      const spans = screen.getAllByText((content, element) => 
+      const spans = screen.getAllByText((_, element) => 
         element?.tagName.toLowerCase() === 'span'
       )
       expect(spans).toHaveLength(2)

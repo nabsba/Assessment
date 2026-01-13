@@ -168,9 +168,9 @@ describe('IconAction Component', () => {
         })
 
         it('does not render tooltip wrapper when disabled', () => {
-            const { container } = render(
-                <IconAction icon="search" tooltip = "Search tooltip" disabled = { true} />
-      )
+            render(
+                <IconAction icon="search" tooltip="Search tooltip" disabled={true} />
+            )
             // When disabled, tooltip wrapper shouldn't be rendered
             const button = screen.getByRole('button')
             expect(button.parentElement?.className).not.toContain('group')

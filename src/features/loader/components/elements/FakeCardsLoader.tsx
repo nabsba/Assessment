@@ -1,7 +1,7 @@
 
 import React from 'react';
-import styles from '../../../searchGithubName/components/listCards/MainListCard.module.css';
 import Card from '../../../searchGithubName/components/listCards/Card';
+import styles from '../../../searchGithubName/components/listCards/MainListCard.module.css';
 
 interface FakeCardsLoaderProps {
     count?: number;
@@ -11,7 +11,7 @@ const FakeCardsLoader: React.FC<FakeCardsLoaderProps> = ({
     count = 10
 }) => {
     // Crée des faux utilisateurs
-    const fakeUsers = Array.from({ length: count }, (_, index) => ({
+    const fakeUsers = Array.from({ length: count }, (_,) => ({
         id: `Unknown`,
         login: `Unknown`,
         avatar_url: '',

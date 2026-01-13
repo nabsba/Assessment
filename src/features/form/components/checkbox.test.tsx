@@ -1,10 +1,8 @@
-import React from 'react'
 import { fireEvent, render, screen } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import Checkbox from './Checkbox'
+import Checkbox from './CheckBox'
 
-import type { CheckboxProps } from '../types'
 
 // Mock the CSS module
 vi.mock('./Checkbox.module.css', () => ({
@@ -262,7 +260,7 @@ describe('Checkbox Component', () => {
         })
 
         it('input has aria-labelledby when text is provided', () => {
-            const { container } = render(
+        render(
                 <Checkbox
                     checked={false}
                     onChange={mockOnChange}
