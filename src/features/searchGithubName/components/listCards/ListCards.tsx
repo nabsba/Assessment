@@ -6,8 +6,8 @@ import Card from './Card'
 import styles from './MainListCard.module.css'
 
 export default function ListCard() {
-  const { card, mainListCard } = content as ContentConfig;
-  const { state, searchUsers } = useSearchContext();
+  const { card, mainListCard,  } = content as ContentConfig;
+  const { state, searchUsers, showNotification } = useSearchContext();
   const [isFirstVisit, setIsFirstVisit] = useState(true);
 
   const lastCardRef = useRef<HTMLDivElement>(null);
@@ -16,7 +16,18 @@ export default function ListCard() {
   const resultsArray = state.resultsOrder || []; // ids
 
   const handleEndReached = useCallback(() => {
-    const { query, pagination, loading } = state;
+    const { query, pagination, loading, apiLimitations } = state;
+
+ 
+    if (apiLimitations.remaining === 0) {
+      showNotification(content.searchInput.notifications.rateLimitExceeded, 6000);
+      return;
+    }
+
+    if (state.apiLimitations.remaining && state.apiLimitations.remaining <= 2) {
+      showNotification(content.searchInput.notifications.rateLimitWarning);
+    }
+
     if (!query || !pagination.hasNextPage || loading) return;
 
     searchUsers(query, pagination.currentPage + 1);
