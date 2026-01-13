@@ -1,73 +1,46 @@
-# React + TypeScript + Vite
+# GitHub User Search – React + TypeScript Assessment
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project implements a GitHub user search experience with debounced input, pagination, selection, and bulk actions, focusing on performance, UX clarity, and predictable state management.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## React Compiler
+- 🔍 Debounced search with typing / deleting strategies
+- ⛔ Request cancellation using `AbortController` to prevent race conditions
+- 📄 Pagination with infinite scroll (IntersectionObserver, append mode)
+- 📌 Normalized state management with `useReducer` + Context
+- ✅ Bulk selection (select all, toggle, delete, duplicate)
+- 🚨 GitHub API rate-limit awareness with proactive notifications
+- 💬 Centralized notification system
+- 🧪 Reducer and UI logic designed for testability
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## Architecture Overview
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **State Management:** Context + Reducer (predictable transitions, testable logic)
+- **Async Control:** Centralized API layer with abort handling
+- **UI Interaction:** Debounced input logic isolated in the search component
+- **Data Structure:** Hash map (Map / dictionary semantics) + ordered ID list
+- **Scrolling:** IntersectionObserver for append pagination
+- **UX Strategy:** Progressive disclosure, clear loading states, and error feedback
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Detailed design and UX decisions are documented in:  
+👉 `DESIGN_DECISION.md`
+👉 `SchemaComponents.png`
+👉 `choice.md`
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Getting Started
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Install
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```bash
+npm install
+npm run dev
+npm run test
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+
+
