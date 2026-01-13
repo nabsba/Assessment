@@ -35,9 +35,9 @@ export default function MainSearchGitHubName() {
             isLoading={state.loading}
             isError={!!state.error}
             errorProps={{ type: ErrorType.SERVER }}
-            loaderProps={{ type: LoaderType.DEFAULT }}
+            loaderProps={{ type: LoaderType.CARDS }}
             loadingMode={loadingMode}
-            appendLoaderProps={{ type: LoaderType.DOTS }}
+            appendLoaderProps={{ type: LoaderType.CARDS }}
           >
             <ListCards />
           </DataFetchingWrapper>
