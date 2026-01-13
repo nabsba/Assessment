@@ -5,6 +5,9 @@ import { ICON_MAP, ICON_SIZES } from '../../data/icons'
 
 import type { IconActionProps } from '../../types';
 
+
+
+
 export default function IconAction({
     icon,
     onClick,
@@ -19,7 +22,7 @@ export default function IconAction({
     if (!IconComponent) {
         return null;
     }
-    const isClickable = !!onClick && !disabled; 
+    const isClickable = !!onClick && !disabled;
 
     const iconSize = ICON_SIZES[size];
 
@@ -30,8 +33,12 @@ export default function IconAction({
         }
     };
 
-    // FIX: Add text as fallback for aria-label
-    const buttonAriaLabel = String(ariaLabel || text || `Icon ${icon}`);
+    // Handle aria-label for JSX content
+    const getAriaLabel = () => {
+        if (ariaLabel) return ariaLabel;
+        if (typeof text === 'string') return text;
+        return `Icon ${icon}`;
+    };
 
     const button = (
         <button
@@ -43,12 +50,12 @@ export default function IconAction({
     ${disabled ? styles.disabled : ""}
     ${className}
   `}
-            aria-label={buttonAriaLabel}
+            aria-label={getAriaLabel()}
             disabled={disabled}
             title={tooltip}
         >
             <IconComponent />
-            {text && <span>{text}</span>}
+            {text && text}
         </button>
     );
 

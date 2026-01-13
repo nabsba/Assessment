@@ -40,7 +40,14 @@ export default function Menus() {
             <IconAction
               icon={hasSelectedUsers ? "stackIcon" : "stackIconEmpty"}
               onClick={() => toggleSelectAllUsers(!hasSelectedUsers)}
-              text={`${selectedCount ? selectedCount + (selectedCount > 1 ? ' ' + menu.indiceSelections : ' ' + menu.indiceSelection) : menu.selectAll}`}
+              text={
+                <p>
+                  <strong>{selectedCount > 1 ? selectedCount : ''}</strong>
+                  {selectedCount
+                    ? ` ${selectedCount > 1 ? menu.indiceSelections : menu.indiceSelection}`
+                    : ` ${menu.selectAll}`}
+                </p>
+              }
             />
           <div>
             <div className={styles.wrapper_icons_right}> 
