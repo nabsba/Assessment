@@ -124,12 +124,21 @@ export function duplicateSelectedInOrder(
     results: Record<string, UserGitHubProfile>,
     order: string[],
     selected: Record<string, boolean>
-) {
+): {
+    results: Record<string, UserGitHubProfile>;
+    order: string[];
+    alreadyHasDuplicates: boolean;
+} {
     const selectedIds = new Set(Object.keys(selected));
-    if (selectedIds.size === 0) return { results, order };
+    if (selectedIds.size === 0) return {
+        results,
+        order,
+        alreadyHasDuplicates: false
+    };
 
     const nextResults = { ...results };
     const nextOrder: string[] = [];
+    let alreadyHasDuplicates = false;
 
     for (const id of order) {
         nextOrder.push(id);
@@ -137,10 +146,21 @@ export function duplicateSelectedInOrder(
         if (!selectedIds.has(id)) continue;
 
         const original = nextResults[id];
-        if (!original || original.isDuplicate) continue;
+        if (!original) continue;
+
+        // Check if already a duplicate
+        if (original.isDuplicate) {
+            alreadyHasDuplicates = true;
+            continue;
+        }
 
         const duplicateId = `${id}_copy`;
-        if (nextResults[duplicateId]) continue;
+
+        // Check if duplicate already exists for this user
+        if (nextResults[duplicateId]) {
+            alreadyHasDuplicates = true;
+            continue;
+        }
 
         nextResults[duplicateId] = {
             ...original,
@@ -152,5 +172,9 @@ export function duplicateSelectedInOrder(
         nextOrder.push(duplicateId);
     }
 
-    return { results: nextResults, order: nextOrder };
+    return {
+        results: nextResults,
+        order: nextOrder,
+        alreadyHasDuplicates
+    };
 }

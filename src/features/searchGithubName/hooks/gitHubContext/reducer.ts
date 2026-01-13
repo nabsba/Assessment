@@ -103,7 +103,8 @@ export function searchReducer(state: SearchState, action: SearchAction): SearchS
         }
 
         case "DUPLICATE_SELECTED": {
-            const { results, order } = duplicateSelectedInOrder(state.results, state.resultsOrder, state.selectedUsers);
+            const { results, order, alreadyHasDuplicates  } = duplicateSelectedInOrder(state.results, state.resultsOrder, state.selectedUsers);
+            console.log(alreadyHasDuplicates)
             return { ...state, results, resultsOrder: order };
         }
 

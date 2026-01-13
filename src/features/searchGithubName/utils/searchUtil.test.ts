@@ -317,5 +317,95 @@ describe("search helpers", () => {
 
             expect(nextResults["1_copy"].originalId).toBe(1);
         });
+        describe("duplicateSelectedInOrder", () => {
+            // ... existing tests ...
+
+            it("returns alreadyHasDuplicates = true when selected item is already a duplicate", () => {
+                const results: Record<string, UserGitHubProfile> = {
+                    "1_copy": { id: "1_copy", login: "a", isDuplicate: true, originalId: 1 },
+                };
+                const order = ["1_copy"];
+                const selected = { "1_copy": true };
+
+                const { alreadyHasDuplicates } = duplicateSelectedInOrder(
+                    results as any,
+                    order,
+                    selected
+                );
+
+                expect(alreadyHasDuplicates).toBe(true);
+            });
+
+            it("returns alreadyHasDuplicates = true when selected item already has a duplicate", () => {
+                const results: Record<string, UserGitHubProfile> = {
+                    "1": { id: 1, login: "a" },
+                    "1_copy": { id: "1_copy", login: "a_copy", isDuplicate: true, originalId: 1 },
+                };
+                const order = ["1", "1_copy"];
+                const selected = { "1": true };
+
+                const { alreadyHasDuplicates } = duplicateSelectedInOrder(
+                    results as any,
+                    order,
+                    selected
+                );
+
+                expect(alreadyHasDuplicates).toBe(true);
+            });
+
+            it("returns alreadyHasDuplicates = false when fresh duplicates are created", () => {
+                const results: Record<string, UserGitHubProfile> = {
+                    "1": { id: 1, login: "a" },
+                    "2": { id: 2, login: "b" },
+                };
+                const order = ["1", "2"];
+                const selected = { "1": true, "2": true };
+
+                const { alreadyHasDuplicates } = duplicateSelectedInOrder(
+                    results as any,
+                    order,
+                    selected
+                );
+
+                expect(alreadyHasDuplicates).toBe(false);
+            });
+
+            it("returns alreadyHasDuplicates = false when nothing is selected", () => {
+                const results: Record<string, UserGitHubProfile> = {
+                    "1": { id: 1, login: "a" },
+                };
+                const order = ["1"];
+                const selected = {};
+
+                const { alreadyHasDuplicates } = duplicateSelectedInOrder(
+                    results as any,
+                    order,
+                    selected
+                );
+
+                expect(alreadyHasDuplicates).toBe(false);
+            });
+
+            it("returns alreadyHasDuplicates = true when some items have existing duplicates and others are fresh", () => {
+                const results: Record<string, UserGitHubProfile> = {
+                    "1": { id: 1, login: "a" },
+                    "1_copy": { id: "1_copy", login: "a_copy", isDuplicate: true, originalId: 1 },
+                    "2": { id: 2, login: "b" },
+                    "2_copy": { id: "2_copy", login: "b_copy", isDuplicate: true, originalId: 2 },
+                    "3": { id: 3, login: "c" }, // No duplicate
+                };
+                const order = ["1", "1_copy", "2", "2_copy", "3"];
+                const selected = { "1": true, "2": true, "3": true };
+
+                const { alreadyHasDuplicates, order: nextOrder } = duplicateSelectedInOrder(
+                    results as any,
+                    order,
+                    selected
+                );
+
+                expect(alreadyHasDuplicates).toBe(true); // Because 1 and 2 already have duplicates
+                expect(nextOrder).toEqual(["1", "1_copy", "2", "2_copy", "3", "3_copy"]); // Only 3 gets duplicated
+            });
+        });
     });
 });
