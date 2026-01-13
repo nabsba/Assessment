@@ -32,25 +32,24 @@ const FakeCardsLoader: React.FC<FakeCardsLoaderProps> = ({
         received_events_url: '',
         user_view_type: 'public',
         site_admin: false,
-        isFake: true // Marqueur pour le style
+        isFake: true 
     }));
 
     return (
         <div className={styles.cardGrid}>
-            {fakeUsers.map((fakeUser) => (
+            {fakeUsers.map((fakeUser, index) => (
                 <div
-                    key={fakeUser.id}
+                    key={fakeUser.id + index}
                     className={styles.cardWrapper}
                     style={{ position: 'relative' }}
                 >
-                    {/* Appelle le vrai composant Card avec le faux utilisateur */}
                     <Card
                         user={fakeUser}
                         onButtonClick={() => { }}
                         buttonText="View Profile"
                     />
 
-                    {/* Overlay shimmer sur la carte */}
+
                     <div style={{
                         position: 'absolute',
                         top: 0,
