@@ -6,7 +6,7 @@
     "placeholder": "Search input",
     "notifications": {
       "rateLimitWarning": "Be careful only 2 requests left.",
-      "rateLimitExceeded": "Rate limit exceeded. Please try again later."
+      "rateLimitExceeded": "Rate limit exceeded. Please try in one minute"
     }
   },
   "card": {
