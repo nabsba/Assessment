@@ -6,10 +6,10 @@ import ENDPOINTS from '../../../api/data/constant';
 
 type SearchState = {
     query: string;
-    results: Record<number|string, UserGitHubProfile> | null;
+    results: Record<number | string, UserGitHubProfile> | null;
     loading: boolean;
     error: string | null;
-    selectedUsers: Record<number, boolean>; 
+    selectedUsers: Record<number, boolean>;
     apiLimitations: {
         remaining: number | null;
         rateLimit: number | null;
@@ -17,11 +17,11 @@ type SearchState = {
     notification: string | null;
     pagination: {
         currentPage: number;
-        totalItems: number;      
+        totalItems: number;
         perPage: number;
-        hasNextPage: boolean;    
+        hasNextPage: boolean;
         hasPreviousPage: boolean;
-        totalPages: number;   
+        totalPages: number;
     }
 };
 export interface UserGitHubProfile {
@@ -86,10 +86,10 @@ export const SearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             totalPages: 0,
         }
     });
-const [editMode, setEditMode] = useState(false);
-const handleEditModeChange = () => {
-    setEditMode(!editMode);
-}
+    const [editMode, setEditMode] = useState(false);
+    const handleEditModeChange = () => {
+        setEditMode(!editMode);
+    }
     const abortControllerRef = useRef<AbortController | null>(null);
     const updateQuery = useCallback((query: string) => {
         setState(prev => ({ ...prev, query }));
@@ -146,7 +146,7 @@ const handleEditModeChange = () => {
                         hasNextPage: totalPages > 1,
                         hasPreviousPage: false
                     }
-            
+
                 };
             });
         } catch (error: any) {
@@ -200,7 +200,7 @@ const handleEditModeChange = () => {
             selectedUserIds.forEach(id => {
                 const originalUser = prev.results![parseInt(id)];
                 if (originalUser) {
-                 
+
                     const duplicateId = `${originalUser.id}_copy`;
 
                     if (updatedResults[duplicateId]) {
@@ -216,7 +216,7 @@ const handleEditModeChange = () => {
                         originalId: originalUser.id,
                     };
 
-          
+
                     updatedResults[duplicateId] = duplicate;
                 }
             });
@@ -233,9 +233,9 @@ const handleEditModeChange = () => {
             const updatedUsers = { ...prev.selectedUsers };
 
             if (isSelected) {
-                delete updatedUsers[userId]; 
+                delete updatedUsers[userId];
             } else {
-                updatedUsers[userId] = true; 
+                updatedUsers[userId] = true;
             }
 
             return {
@@ -279,7 +279,6 @@ const handleEditModeChange = () => {
             }
         });
     }, []);
-    
     const showNotification = useCallback((message: string, duration: number = 3000) => {
         setState(prev => ({ ...prev, notification: message }));
 
