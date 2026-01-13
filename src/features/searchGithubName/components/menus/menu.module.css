@@ -1,4 +1,4 @@
 .wrapper_icons_right {
     display: flex;
-    gap: var(--space-primary);
+    gap: 1rem;
 }
