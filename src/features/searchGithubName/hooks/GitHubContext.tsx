@@ -15,6 +15,14 @@ type SearchState = {
         rateLimit: number | null;
     };
     notification: string | null;
+    pagination: {
+        currentPage: number;
+        totalItems: number;      
+        perPage: number;
+        hasNextPage: boolean;    
+        hasPreviousPage: boolean;
+        totalPages: number;   
+    }
 };
 export interface UserGitHubProfile {
     login: string
@@ -68,7 +76,15 @@ export const SearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             remaining: null,
             rateLimit: null,
         },
-        notification: null
+        notification: null,
+        pagination: {
+            currentPage: 1,
+            totalItems: 0,
+            perPage: 30,
+            hasNextPage: false,
+            hasPreviousPage: false,
+            totalPages: 0,
+        }
     });
 const [editMode, setEditMode] = useState(false);
 const handleEditModeChange = () => {
@@ -104,6 +120,7 @@ const handleEditModeChange = () => {
             );
             setState(prev => {
                 const items = response.data.items || [];
+                const totalCount = response.data.total_count || 0;
                 const resultsMap: Record<number, UserGitHubProfile> = {};
                 const resultsOrder: number[] = [];
 
@@ -111,7 +128,7 @@ const handleEditModeChange = () => {
                     resultsMap[user.id as unknown as number] = user;
                     resultsOrder.push(user.id as unknown as number);
                 });
-
+                const totalPages = Math.ceil(totalCount / prev.pagination.perPage);
                 return {
                     ...prev,
                     results: resultsMap,
@@ -121,6 +138,13 @@ const handleEditModeChange = () => {
                     apiLimitations: {
                         remaining: response.headers['x-ratelimit-remaining'] ? parseInt(response.headers['x-ratelimit-remaining']) : null,
                         rateLimit: response.headers['x-ratelimit-limit'] ? parseInt(response.headers['x-ratelimit-limit']) : null,
+                    },
+                    pagination: {
+                        ...prev.pagination,
+                        totalItems: totalCount,
+                        totalPages: totalPages,
+                        hasNextPage: totalPages > 1,
+                        hasPreviousPage: false
                     }
             
                 };
