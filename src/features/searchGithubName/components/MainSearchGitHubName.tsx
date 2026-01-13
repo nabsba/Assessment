@@ -43,7 +43,7 @@ export default function MainSearchGitHubName() {
         </div>
 
         <div className={styles.scrollableContent}>
-          {!hasResults ? (
+          {!hasResults && !state.loading ? (
             <div className={styles.emptyContainer}>
               <p>{isFirstVisit ? mainListCard.startState : mainListCard.emptyState}</p>
             </div>
