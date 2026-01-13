@@ -75,7 +75,7 @@ const GitHubSearch: React.FC = () => {
                         direction="opacity-only"
                         opacityDuration={500}
                         duration={500}
-                        opacityDelay={1400}
+                        opacityDelay={100}
                         triggerOnView={true}
                     >
                         <p className={styles.notification}>
