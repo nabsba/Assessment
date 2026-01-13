@@ -4,8 +4,16 @@ import ErrorComponent from '../../error/components/ErrorComponent';
 import Loader from '../../loader/components/Loader';
 import type { DataFetchingWrapperProps } from '../types';
 
+export const DataFetchingLoadingMode = {
+    REPLACE: 'replace',
+    APPEND: 'append',
+} as const;
+
+export type DataFetchingLoadingModeType =
+    typeof DataFetchingLoadingMode[keyof typeof DataFetchingLoadingMode];
+
 interface EnhancedDataFetchingWrapperProps extends DataFetchingWrapperProps {
-    loadingMode?: 'replace' | 'append';
+    loadingMode?: DataFetchingLoadingModeType;
     appendLoaderProps?: any;
     appendLoaderContent?: React.ReactNode;
     appendLoaderStyle?: React.CSSProperties;
