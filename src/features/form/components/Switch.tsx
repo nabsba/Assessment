@@ -27,7 +27,6 @@ const Switch: React.FC<SwitchProps> = ({
         onChange?.(newValue);
     };
 
-    // Calculate knob position based on size
     const getKnobPosition = () => {
         const knobWidth = {
             small: 16,
@@ -77,7 +76,7 @@ const Switch: React.FC<SwitchProps> = ({
                 />
             </button>
             {label && (
-                <span className={styles.label}>
+                <span>
                     {label}
                 </span>
             )}
