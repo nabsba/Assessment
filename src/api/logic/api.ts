@@ -120,9 +120,9 @@ export class ApiService {
     }
 
   
-    setDefaultHeaders(headers: Record<string, string>): void {
+    // setDefaultHeaders(headers: Record<string, string>): void {
        
-    }
+    // }
 
     /**
      * Helper to build query string from object

@@ -411,14 +411,14 @@ describe('ApiService', () => {
         });
     });
 
-    describe('setDefaultHeaders method', () => {
-        it('should be callable (currently does nothing)', () => {
-            // This is a placeholder test since the method currently does nothing
-            expect(() => {
-                apiService.setDefaultHeaders({ 'Authorization': 'Bearer token' });
-            }).not.toThrow();
-        });
-    });
+    // describe('setDefaultHeaders method', () => {
+    //     // it('should be callable (currently does nothing)', () => {
+    //     //     // This is a placeholder test since the method currently does nothing
+    //     //     expect(() => {
+    //     //         apiService.setDefaultHeaders({ 'Authorization': 'Bearer token' });
+    //     //     }).not.toThrow();
+    //     // });
+    // });
 
     describe('Request cancellation', () => {
         it('should use provided abort signal', async () => {

@@ -1,8 +1,8 @@
+import { FaGithub, FaGlobe, FaLinkedin, FaTwitter } from 'react-icons/fa';
 import {
   FiCalendar,
   FiChevronLeft,
   FiChevronRight,
-  FiCopy,
   FiGitBranch,
   FiHome,
   FiLink,
@@ -13,14 +13,12 @@ import {
   FiSearch,
   FiSettings,
   FiStar,
-  FiTrash2,
   FiUser,
-  FiX,
-} from 'react-icons/fi'
-import { FaGithub, FaGlobe, FaLinkedin, FaTwitter } from 'react-icons/fa'
+  FiX
+} from 'react-icons/fi';
+import { DuplicateIcon } from '../components/icons/DuplicateIcon';
 import StackIcon from '../components/icons/StackIcon';
 import { StackIconEmpty } from '../components/icons/StackIconEmpty';
-import { DuplicateIcon } from '../components/icons/DuplicateIcon';
 import { TrashIcon } from '../components/icons/TrashIcon';
 
 
