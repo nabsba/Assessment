@@ -9,7 +9,7 @@ export interface SearchConfig {
 export function createDebouncedSearch<T extends (...args: any[]) => any>(
     searchFn: T,
     config: SearchConfig = {}
-): (...args: Parameters<T>) => void {
+) {
     const {
         debounceDelay = 500,
         minLength = 1,
@@ -19,7 +19,7 @@ export function createDebouncedSearch<T extends (...args: any[]) => any>(
 
     let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
-    return (...args: Parameters<T>) => {
+    const debouncedFn = (...args: Parameters<T>) => {
         const searchTerm = args[0] as string;
 
         // Validation
@@ -47,6 +47,16 @@ export function createDebouncedSearch<T extends (...args: any[]) => any>(
             timeoutId = null;
         }, debounceDelay);
     };
+
+ 
+    debouncedFn.cancel = () => {
+        if (timeoutId) {
+            clearTimeout(timeoutId);
+            timeoutId = null;
+        }
+    };
+
+    return debouncedFn;
 }
 
 
