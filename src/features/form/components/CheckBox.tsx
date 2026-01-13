@@ -1,7 +1,6 @@
 import React from 'react'
-
 import type { CheckboxProps } from '../types';
-import styles from './Checkbox.module.css'; // Optional CSS module
+import styles from './Checkbox.module.css';
 
 const Checkbox: React.FC<CheckboxProps> = ({
     checked,
@@ -10,6 +9,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
     disabled = false,
     className = '',
     style = {},
+    customStyles = {}, // Add customStyles prop
     id,
     name,
     tooltip,
@@ -31,6 +31,12 @@ const Checkbox: React.FC<CheckboxProps> = ({
 
     // Generate unique ID if not provided (for label association)
     const checkboxId = id || `checkbox-${Math.random().toString(36).substr(2, 9)}`;
+
+    // Merge custom styles based on checked state
+    const checkboxCustomStyles = {
+        ...customStyles?.checkboxCustom,
+        ...(checked ? customStyles?.checkboxChecked : {})
+    };
 
     return (
         <div
@@ -57,10 +63,17 @@ const Checkbox: React.FC<CheckboxProps> = ({
                     onClick={() => !disabled && onChange(!checked)}
                     onKeyDown={handleKeyDown}
                     tabIndex={0}
-                    
+                    style={checkboxCustomStyles} // Apply custom styles here
                     aria-checked={checked}
                     aria-labelledby={text ? `${checkboxId}-label` : undefined}
                 />
+                {/* Add the checkmark with custom styles */}
+                {checked && (
+                    <span
+                        className={styles.checkmark || ''}
+                        style={customStyles?.checkmark}
+                    />
+                )}
             </div>
 
             {text && (

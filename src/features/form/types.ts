@@ -27,6 +27,11 @@ export interface SearchInputProps {
   ariaLabel?: string;
   'data-testid'?: string;
 }
+export interface CheckboxCustomStyles {
+  checkboxCustom?: React.CSSProperties;
+  checkboxChecked?: React.CSSProperties;
+  checkmark?: React.CSSProperties;
+}
 
 export interface CheckboxProps {
   /** Whether the checkbox is checked */
@@ -51,4 +56,5 @@ export interface CheckboxProps {
   required?: boolean;
   /** Test ID for testing */
   'data-testid'?: string;
+  customStyles?: CheckboxCustomStyles
 }

@@ -39,3 +39,32 @@
 .content > * {
     margin: 0.5rem 0;
 }
+
+/* Card.module.css */
+
+/* Target the custom checkbox span */
+.checkboxWrapper :global(.checkboxCustom) {
+    border-color: var(--color-primary);
+    background-color: white;
+}
+
+/* When checked */
+.checkboxWrapper :global(.checkboxInput:checked + .checkboxCustom) {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+/* Change tick color */
+.checkboxWrapper :global(.checkboxInput:checked + .checkboxCustom:after) {
+    border-color: white;
+}
+
+/* Optional: Hover states */
+.checkboxWrapper :global(.checkboxCustom:hover) {
+    border-color: blue;
+}
+
+.checkboxWrapper :global(.checkboxInput:checked + .checkboxCustom:hover) {
+    background-color: red;
+    border-color: red;
+}

@@ -30,13 +30,28 @@ export default function Card({
 
   return (
     <div className={`${styles.card} ${className}`}>
-      {editMode  && <div className={styles.checkboxWrapper}>
-        <Checkbox
-          checked={isSelected}
-          onChange={() => toggleUserSelection(user.id as unknown as number)}
-          text={card.checkbox.text}
-        />
-      </div>}
+    {editMode && <div className={styles.checkboxWrapper}>
+      <Checkbox
+        checked={isSelected}
+        onChange={() => toggleUserSelection(user.id as unknown as number)}
+        text={card.checkbox.text}
+        customStyles={{
+          checkboxCustom: {
+            borderColor: 'black',
+            borderWidth: '4px',
+            backgroundColor: 'var(--color-tertiary)',
+          },
+          checkboxChecked: {
+            backgroundColor: 'var(--color-tertiary)',
+            borderColor: 'black',
+            borderWidth: '4px',
+          },
+          checkmark: {
+            color: 'black',
+          }
+        }}
+      />
+    </div>}
       <div className={styles.content}>
         <Avatar
           src={user.avatar_url}
