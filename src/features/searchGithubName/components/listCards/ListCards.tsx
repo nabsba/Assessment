@@ -7,7 +7,7 @@ import { useEffect, useMemo, useState, useCallback, useRef } from 'react'
 
 export default function ListCard() {
   const { card, mainListCard } = content as ContentConfig;
-  const { state } = useSearchContext();
+  const { state, searchUsers } = useSearchContext();
   const [isFirstVisit, setIsFirstVisit] = useState(true);
 
 
@@ -20,10 +20,18 @@ export default function ListCard() {
   }, [state.results]);
 
   const handleEndReached = useCallback(() => {
-    console.log('📜 End of list reached!');
-    console.log('Triggering load more function...');
+    const { query, pagination, loading } = state;
 
-  }, []);
+    if (!query || !pagination.hasNextPage || loading) {
+
+      return;
+    }
+
+    const nextPage = pagination.currentPage + 1;
+
+
+    searchUsers(query, nextPage);
+  }, [state.query, state.pagination, state.loading, searchUsers]);
 
   useEffect(() => {
     if (!lastCardRef.current || resultsArray.length === 0) return;
@@ -38,8 +46,6 @@ export default function ListCard() {
       (entries) => {
         const [entry] = entries;
         if (entry.isIntersecting) {
-          console.log('🎯 Dernière carte visible!');
-          console.log('🔄 Déclenchement de handleEndReached...');
           handleEndReached();
         }
       },

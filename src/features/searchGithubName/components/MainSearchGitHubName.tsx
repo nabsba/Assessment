@@ -11,15 +11,16 @@ import GitHubSearch from './GitHubSearchInput/GitHubSearchInput'
 export default function MainSearchGitHubName() {
   const { state } = useSearchContext();
 
+  const hasResults = state.results && Object.keys(state.results).length > 0;
+  const loadingMode = !hasResults ? 'replace' : 'append';
+
   return (
     <>
-      {/* Header fixed at top */}
       <div className={styles.fixedHeader}>
         <Header />
       </div>
 
       <div className={styles.mainContainer}>
-        {/* Search and menus - sticky below header */}
         <div className={styles.stickySection}>
           <div className={`flex-center ${styles.searchContainer}`}>
             <GitHubSearch />
@@ -29,13 +30,14 @@ export default function MainSearchGitHubName() {
           </div>
         </div>
 
-        {/* Scrollable content area */}
         <div className={styles.scrollableContent}>
           <DataFetchingWrapper
             isLoading={state.loading}
             isError={!!state.error}
             errorProps={{ type: ErrorType.SERVER }}
-            loaderProps={{ type: LoaderType.DOTS }}
+            loaderProps={{ type: LoaderType.DEFAULT }}
+            loadingMode={loadingMode}
+            appendLoaderProps={{ type: LoaderType.DOTS }}
           >
             <ListCards />
           </DataFetchingWrapper>

@@ -7,6 +7,7 @@ import ENDPOINTS from '../../../api/data/constant';
 type SearchState = {
     query: string;
     results: Record<number | string, UserGitHubProfile> | null;
+    // resultsOrder: UserGitHubProfile[] | null,
     loading: boolean;
     error: string | null;
     selectedUsers: Record<number, boolean>;
@@ -52,7 +53,7 @@ interface SearchContextInterface {
     editMode: boolean;
     handleEditModeChange: () => void;
     updateQuery: (query: string) => void;
-    searchUsers: (query: string) => Promise<void>;
+    searchUsers: (query: string, page?: number) => Promise<void>;
     deleteUserSelection: () => void;
     toggleUserSelection: (userId: number) => void;
     clearResults: () => void;
@@ -69,6 +70,7 @@ export const SearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const [state, setState] = useState<SearchState>({
         query: '',
         results: null,
+        // resultsOrder:null,
         loading: false,
         error: null,
         selectedUsers: {},
@@ -94,22 +96,30 @@ export const SearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const updateQuery = useCallback((query: string) => {
         setState(prev => ({ ...prev, query }));
     }, []);
-    const searchUsers = useCallback(async (query: string) => {
+    const searchUsers = useCallback(async (query: string, page: number = 1) => {
         if (!query.trim()) {
             setState(prev => ({ ...prev, results: {}, error: null }));
             return;
         }
 
+        const isNewSearch = page === 1; 
         if (abortControllerRef.current) {
             abortControllerRef.current.abort();
         }
 
         abortControllerRef.current = new AbortController();
-        setState(prev => ({ ...prev, loading: true, error: null }));
+
+        setState(prev => ({
+            ...prev,
+            query:query,
+            loading: true,
+            error: null,
+            ...(isNewSearch && { results: {} })
+        }));
 
         try {
             const response = await apiService.get(
-                `${ENDPOINTS.GITHUB.SEARCH_USER}users?q=${encodeURIComponent(query)}&per_page=30`,
+                `${ENDPOINTS.GITHUB.SEARCH_USER}users?q=${encodeURIComponent(query)}&per_page=30&page=${page}`,
                 {
                     headers: {
                         'Accept': 'application/vnd.github.v3+json',
@@ -118,49 +128,57 @@ export const SearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                     timeout: 10000,
                 }
             );
+
             setState(prev => {
                 const items = response.data.items || [];
                 const totalCount = response.data.total_count || 0;
-                const resultsMap: Record<number, UserGitHubProfile> = {};
-                const resultsOrder: number[] = [];
+                const resultsMap = isNewSearch ? {} : { ...prev.results }; // Garde les anciens si page > 1
+                // const resultsOrder = isNewSearch ? [] : [...(prev.resultsOrder || [])]; // Garde l'ordre existant
 
                 items.forEach((user: UserGitHubProfile) => {
-                    resultsMap[user.id as unknown as number] = user;
-                    resultsOrder.push(user.id as unknown as number);
+                    resultsMap[user.id] = user;
+                    // resultsOrder.push(user.id);
                 });
+
                 const totalPages = Math.ceil(totalCount / prev.pagination.perPage);
+                const hasNextPage = page < totalPages;
+
                 return {
                     ...prev,
                     results: resultsMap,
-                    resultsOrder: resultsOrder,
+                    // resultsOrder: resultsOrder,
                     loading: false,
                     error: null,
                     apiLimitations: {
-                        remaining: response.headers['x-ratelimit-remaining'] ? parseInt(response.headers['x-ratelimit-remaining']) : null,
-                        rateLimit: response.headers['x-ratelimit-limit'] ? parseInt(response.headers['x-ratelimit-limit']) : null,
+                        remaining: response.headers['x-ratelimit-remaining'] ?
+                            parseInt(response.headers['x-ratelimit-remaining']) : null,
+                        rateLimit: response.headers['x-ratelimit-limit'] ?
+                            parseInt(response.headers['x-ratelimit-limit']) : null,
                     },
                     pagination: {
                         ...prev.pagination,
+                        currentPage: page,
                         totalItems: totalCount,
                         totalPages: totalPages,
-                        hasNextPage: totalPages > 1,
-                        hasPreviousPage: false
+                        hasNextPage: hasNextPage,
+                        hasPreviousPage: page > 1
                     }
-
                 };
             });
         } catch (error: any) {
-
             if (error.name === 'AbortError' || error.message?.includes('aborted')) {
                 return;
             }
-
 
             setState(prev => ({
                 ...prev,
                 loading: false,
                 error: error.message || 'Failed to search users',
-                results: {},
+                results: isNewSearch ? {} : prev.results, // Garde les anciens résultats si erreur sur page > 1
+                pagination: {
+                    ...prev.pagination,
+                    currentPage: isNewSearch ? 1 : prev.pagination.currentPage
+                }
             }));
         }
     }, []);
