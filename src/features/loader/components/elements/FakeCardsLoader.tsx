@@ -12,8 +12,8 @@ const FakeCardsLoader: React.FC<FakeCardsLoaderProps> = ({
 }) => {
     // Crée des faux utilisateurs
     const fakeUsers = Array.from({ length: count }, (_, index) => ({
-        id: `fake-${index}`,
-        login: `user${index}`,
+        id: `Unknown`,
+        login: `Unknown`,
         avatar_url: '',
         html_url: '#',
         type: 'User',
