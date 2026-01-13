@@ -20,12 +20,12 @@ export default function Menus() {
         alignItems: 'center',
         marginBottom: '16px'
       }}>
-        <Switch
+        {state.results && <Switch
           checked={editMode}
           onChange={handleEditModeChange}
           label={menu.editModeLabel}
           data-testid="edit-mode-switch" // Add this
-        />
+        />}
       </div>
 
       {editMode && (

@@ -2,32 +2,57 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi, beforeEach, afterAll } from "vitest";
 import Menus from "./Menus";
 
-// Mock IconAction
+// Mock IconAction - update to handle JSX text
 vi.mock("../../../shared/components/iconAction/IconAction", () => ({
-    default: ({ icon, onClick, text, disabled }: any) => (
-        <button
-            onClick={onClick}
-            disabled={disabled}
-            data-testid={`icon-action-${icon}`}
-            aria-label={icon}
-        >
-            {icon} {text && `(${text})`}
-        </button>
-    ),
+    default: ({ icon, onClick, text, disabled }: any) => {
+        // Handle JSX text by extracting text content
+        let textContent = "";
+        if (text && text.props && text.props.children) {
+            // Handle the <p><strong>...</strong>...</p> structure
+            const children = text.props.children;
+            if (Array.isArray(children)) {
+                textContent = children.map((child: any) => {
+                    if (typeof child === 'string') return child;
+                    if (child && child.props && child.props.children) return child.props.children;
+                    return '';
+                }).join('');
+            } else if (typeof children === 'string') {
+                textContent = children;
+            }
+        } else if (typeof text === 'string') {
+            textContent = text;
+        }
+
+        return (
+            <button
+                onClick={onClick}
+                disabled={disabled}
+                data-testid={`icon-action-${icon}`}
+                aria-label={icon}
+            >
+                {icon} {textContent && `(${textContent})`}
+            </button>
+        );
+    },
 }));
 
-// Mock Switch
+// Mock Switch - fix the onChange handler
 vi.mock("../../../form/components/Switch", () => ({
     default: ({ checked, onChange, label, "data-testid": testId }: any) => (
         <button
             type="button"
             role="switch"
             aria-checked={checked}
-            onClick={() => onChange(!checked)}
+            onClick={() => {
+                // Call onChange with the new value (opposite of current)
+                if (onChange) {
+                    onChange(!checked);
+                }
+            }}
             data-testid={testId || "switch"}
             aria-label={label}
         >
-            {label}
+            {label} (checked: {checked.toString()})
         </button>
     ),
 }));
@@ -44,6 +69,7 @@ vi.mock("../../data/content.json", () => ({
             indiceSelection: "selection",
             indiceSelections: "selections",
             editModeLabel: "Edit Mode",
+            selectAll: "Select All" // Add missing key
         },
     },
 }));
@@ -52,7 +78,10 @@ vi.mock("../../data/content.json", () => ({
 let mockEditMode = false;
 
 const mockContext: any = {
-    state: { selectedUsers: {} },
+    state: {
+        selectedUsers: {},
+        results: [{ id: 1, name: "test" }] // Add results so Switch renders
+    },
     deleteUserSelection: vi.fn(),
     duplicateUserSelection: vi.fn(),
     editMode: mockEditMode,
@@ -60,6 +89,7 @@ const mockContext: any = {
         mockEditMode = newValue;
         mockContext.editMode = newValue;
     }),
+    toggleSelectAllUsers: vi.fn(), // Add missing function
 };
 
 vi.mock("../../hooks/GitHubContext", () => ({
@@ -73,13 +103,20 @@ describe("Menus Component", () => {
         vi.clearAllMocks();
         mockEditMode = false;
 
-        mockContext.state.selectedUsers = {};
+        mockContext.state = {
+            selectedUsers: {},
+            results: [{ id: 1, name: "test" }]
+        };
         mockContext.editMode = false;
 
         mockContext.handleEditModeChange.mockImplementation((newValue: boolean) => {
             mockEditMode = newValue;
             mockContext.editMode = newValue;
         });
+
+        mockContext.deleteUserSelection.mockClear();
+        mockContext.duplicateUserSelection.mockClear();
+        mockContext.toggleSelectAllUsers.mockClear();
     });
 
     afterAll(() => {
@@ -141,7 +178,18 @@ describe("Menus Component", () => {
         expect(mockContext.handleEditModeChange).toHaveBeenCalledWith(true);
     });
 
-   
+    it("calls toggleSelectAllUsers when select all icon is clicked", () => {
+        mockContext.editMode = true;
+        mockContext.state.selectedUsers = {};
+
+        render(<Menus />);
+
+        const selectAllButton = screen.getByTestId("icon-action-stackIconEmpty");
+        fireEvent.click(selectAllButton);
+
+        expect(mockContext.toggleSelectAllUsers).toHaveBeenCalledTimes(1);
+        expect(mockContext.toggleSelectAllUsers).toHaveBeenCalledWith(true);
+    });
 
     it("calls duplicateUserSelection when duplicate icon is clicked with users selected", () => {
         mockContext.editMode = true;
@@ -197,5 +245,6 @@ describe("Menus Component", () => {
 
         const switchElement = screen.getByTestId("edit-mode-switch");
         expect(switchElement).toHaveAttribute("aria-label", "Edit Mode");
+        expect(switchElement.textContent).toContain("Edit Mode");
     });
 });
