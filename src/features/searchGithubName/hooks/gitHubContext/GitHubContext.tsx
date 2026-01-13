@@ -51,11 +51,11 @@ export const SearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             const items = response.data.items || [];
             const totalCount = response.data.total_count || 0;
 
-            const remaining = response.headers["x-ratelimit-remaining"]
-                ? parseInt(response.headers["x-ratelimit-remaining"], 10)
+            const remaining = response.headers[ENDPOINTS.GITHUB.METAS.REMAINING]
+                ? parseInt(response.headers[ENDPOINTS.GITHUB.METAS.REMAINING], 10)
                 : null;
-            const rateResetTime = response.headers["x-ratelimit-reset"]
-                ? parseInt(response.headers["x-ratelimit-reset"], 10)
+            const rateResetTime = response.headers[ENDPOINTS.GITHUB.METAS.RESET]
+                ? parseInt(response.headers[ENDPOINTS.GITHUB.METAS.RESET], 10)
                 : null;
 
             dispatch({
@@ -66,14 +66,14 @@ export const SearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                 isNewSearch,
                 apiLimitations: {
                     remaining,
-                    rateLimit: response.headers["x-ratelimit-limit"]
-                        ? parseInt(response.headers["x-ratelimit-limit"], 10)
+                    rateLimit: response.headers[ENDPOINTS.GITHUB.METAS.REMAINING]
+                        ? parseInt(response.headers[ENDPOINTS.GITHUB.METAS.REMAINING], 10)
                         : null,
                     rateResetTime,
                 },
             });
 
-            // Check if remaining is 9 and we have a reset time
+            
             if (remaining === 9 && rateResetTime) {
                 const now = Math.floor(Date.now() / 1000); // Current time in seconds
                 const resetInSeconds = rateResetTime - now;
