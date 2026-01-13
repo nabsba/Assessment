@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useContext, useRef, useState, useReducer } from "react";
+import React, { createContext, useCallback, useContext, useRef, useReducer } from "react";
 import { ApiService } from "../../../api/logic/api";
 import ENDPOINTS from "../../../api/data/constant";
 
@@ -11,9 +11,9 @@ const apiService = new ApiService();
 
 export const SearchProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [state, dispatch] = useReducer(searchReducer, initialSearchState);
-    const [editMode, setEditMode] = useState(false);
+
     const abortControllerRef = useRef<AbortController | null>(null);
-    const handleEditModeChange = () => setEditMode(v => !v);
+
     const updateQuery = useCallback((query: string) => {
         dispatch({ type: "SET_QUERY", query });
     }, []);
@@ -114,8 +114,6 @@ export const SearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         <SearchContext.Provider
             value={{
                 state,
-                editMode,
-                handleEditModeChange,
                 updateQuery,
                 searchUsers,
                 deleteUserSelection,

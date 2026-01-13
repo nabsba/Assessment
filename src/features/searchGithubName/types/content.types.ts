@@ -83,8 +83,6 @@ export type SearchState = {
 
 export type SearchContextInterface = {
     state: SearchState;
-    editMode: boolean;
-    handleEditModeChange: () => void;
     updateQuery: (query: string) => void;
     searchUsers: (query: string, page?: number) => Promise<void>;
     deleteUserSelection: () => void;
