@@ -108,13 +108,6 @@ export default function ListCard() {
         })}
       </div>
 
-
-      {state.loading && (
-        <div className={styles.loadingIndicator}>
-          <div className={styles.spinner}></div>
-          <p>Loading more users...</p>
-        </div>
-      )}
     </div>
   );
 }
