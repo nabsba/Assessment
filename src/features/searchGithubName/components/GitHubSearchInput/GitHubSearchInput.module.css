@@ -1,0 +1,37 @@
+.searchWrapper {
+    position: relative;
+    /* Remove any padding/margin that might affect layout */
+    margin: 0;
+    padding: 0;
+}
+
+.searchInputContainer {
+    position: relative;
+    z-index: 1;
+}
+
+.notificationWrapper {
+    position: absolute;
+    top: 100%; 
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    
+    height: 0;
+}
+
+.notification {
+    background-color: #fff;
+    border: 1px solid #e1e4e8;
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    font-size: 14px;
+    line-height: 1.4;
+    color: var( --color-text-secondary);
+    position: absolute;
+    top: 4px; 
+    left: 0;
+    right: 0;
+}

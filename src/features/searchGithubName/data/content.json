@@ -3,7 +3,11 @@
     "title": "gitHub search"
   },
   "searchInput": {
-    "placeholder": "Search input"
+    "placeholder": "Search input",
+    "notifications": {
+      "rateLimitWarning": "Be careful only 2 requests left.",
+      "rateLimitExceeded": "Rate limit exceeded. Please try again later."
+    }
   },
   "card": {
     "checkbox": {

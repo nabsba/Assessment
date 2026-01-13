@@ -9,7 +9,6 @@ export default function ListCard() {
   const { card, mainListCard } = content as ContentConfig;
   const { state } = useSearchContext();
   const [isFirstVisit, setIsFirstVisit] = useState(true);
-  
   const handleViewProfile = (userId: number) => {
     console.log(`View profile for user ${userId}`);
   };

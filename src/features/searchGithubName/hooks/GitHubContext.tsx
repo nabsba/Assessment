@@ -9,7 +9,12 @@ type SearchState = {
     results: Record<number|string, UserGitHubProfile> | null;
     loading: boolean;
     error: string | null;
-    selectedUsers: Record<number, boolean>; // For multi-select
+    selectedUsers: Record<number, boolean>; 
+    apiLimitations: {
+        remaining: number | null;
+        rateLimit: number | null;
+    };
+    notification: string | null;
 };
 export interface UserGitHubProfile {
     login: string
@@ -46,6 +51,8 @@ interface SearchContextInterface {
     abortSearch: () => void;
     duplicateUserSelection: () => void;
     toggleSelectAllUsers: (selectAll: boolean) => void;
+    showNotification: (message: string, duration?: number) => () => void;
+
 }
 
 const SearchContext = createContext<SearchContextInterface | undefined>(undefined);
@@ -57,17 +64,20 @@ export const SearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         loading: false,
         error: null,
         selectedUsers: {},
+        apiLimitations: {
+            remaining: null,
+            rateLimit: null,
+        },
+        notification: null
     });
 const [editMode, setEditMode] = useState(false);
 const handleEditModeChange = () => {
     setEditMode(!editMode);
 }
     const abortControllerRef = useRef<AbortController | null>(null);
-
     const updateQuery = useCallback((query: string) => {
         setState(prev => ({ ...prev, query }));
     }, []);
-
     const searchUsers = useCallback(async (query: string) => {
         if (!query.trim()) {
             setState(prev => ({ ...prev, results: {}, error: null }));
@@ -79,7 +89,6 @@ const handleEditModeChange = () => {
         }
 
         abortControllerRef.current = new AbortController();
-
         setState(prev => ({ ...prev, loading: true, error: null }));
 
         try {
@@ -93,7 +102,6 @@ const handleEditModeChange = () => {
                     timeout: 10000,
                 }
             );
-
             setState(prev => {
                 const items = response.data.items || [];
                 const resultsMap: Record<number, UserGitHubProfile> = {};
@@ -110,6 +118,11 @@ const handleEditModeChange = () => {
                     resultsOrder: resultsOrder,
                     loading: false,
                     error: null,
+                    apiLimitations: {
+                        remaining: response.headers['x-ratelimit-remaining'] ? parseInt(response.headers['x-ratelimit-remaining']) : null,
+                        rateLimit: response.headers['x-ratelimit-limit'] ? parseInt(response.headers['x-ratelimit-limit']) : null,
+                    }
+            
                 };
             });
         } catch (error: any) {
@@ -242,6 +255,24 @@ const handleEditModeChange = () => {
             }
         });
     }, []);
+    
+    const showNotification = useCallback((message: string, duration: number = 3000) => {
+        setState(prev => ({ ...prev, notification: message }));
+
+        const timeoutId = setTimeout(() => {
+            setState(prev => {
+                if (prev.notification === message) {
+                    return { ...prev, notification: null };
+                }
+                return prev;
+            });
+        }, duration);
+
+        return () => {
+            clearTimeout(timeoutId);
+            setState(prev => ({ ...prev, notification: null }));
+        };
+    }, []);
     return (
         <SearchContext.Provider
             value={{
@@ -255,7 +286,8 @@ const handleEditModeChange = () => {
                 duplicateUserSelection,
                 toggleSelectAllUsers,
                 editMode,
-                handleEditModeChange
+                handleEditModeChange,
+                showNotification,
             }}
         >
             {children}

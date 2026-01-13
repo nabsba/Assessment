@@ -4,6 +4,10 @@ export interface ContentConfig {
     };
     searchInput: {
         placeholder: string;
+        notifications: {
+            rateLimitWarning: string;
+            rateLimitExceeded: string;
+        };
     };
     card: {
         checkbox: {

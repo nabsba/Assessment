@@ -4,9 +4,11 @@ import { useSearchContext } from '../../hooks/GitHubContext';
 import SearchInput from '../../../form/components/SearchInput';
 import type { ContentConfig } from '../../types/content.types';
 import content from '../../data/content.json'
+import FadeIn from '../../../shared/components/animations/fadeIn/FadeAnimation';
+import styles from './GitHubSearchInput.module.css'
 
 const GitHubSearch: React.FC = () => {
-    const { searchUsers, abortSearch } = useSearchContext();
+    const { searchUsers, abortSearch, state, showNotification } = useSearchContext();
     const [inputValue, setInputValue] = useState('');
 
     const { searchInput } = content as ContentConfig;
@@ -30,14 +32,17 @@ const GitHubSearch: React.FC = () => {
         const isDeleting = value.length < prevValueRef.current.length;
         prevValueRef.current = value;
         setInputValue(value);
-
         abortSearch();
-
         debouncedSearchTyping.current.cancel?.();
         debouncedSearchDeleting.current.cancel?.();
-
+        if (state.apiLimitations.remaining === 2) {
+            showNotification(searchInput.notifications.rateLimitWarning);
+        }
+        if (state.apiLimitations.remaining === 0) {
+            showNotification(searchInput.notifications.rateLimitExceeded, 6000);
+            return;
+        }
         if (isDeleting) {
-            console.log('Deletion detected, length:', value.length);
             if (value.length >= 3) {
                 debouncedSearchDeleting.current(value);
             }
@@ -46,17 +51,36 @@ const GitHubSearch: React.FC = () => {
                 debouncedSearchTyping.current(value);
             }
         }
-    }, [abortSearch]);
+    }, [abortSearch, state.apiLimitations]);
 
 
     return (
+        <div className={styles.searchWrapper}>
+            <div className={styles.searchInputContainer}>
+                <SearchInput
+                    value={inputValue}
+                    onChange={handleInputChange}
+                    className='main-search-GitHubName'
+                    placeholder={searchInput.placeholder}
+                />
+            </div>
 
-        <SearchInput
-            value={inputValue}
-            onChange={handleInputChange}
-            className='main-search-GitHubName' placeholder={searchInput.placeholder}
-        />
-
+            {state.notification && (
+                <div className={styles.notificationWrapper}>
+                    <FadeIn
+                        direction="opacity-only"
+                        opacityDuration={500}
+                        duration={500}
+                        opacityDelay={1400}
+                        triggerOnView={true}
+                    >
+                        <p className={styles.notification}>
+                            {state.notification}
+                        </p>
+                    </FadeIn>
+                </div>
+            )}
+        </div>
     );
 };
 
