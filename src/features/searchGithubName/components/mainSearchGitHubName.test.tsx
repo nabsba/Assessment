@@ -81,16 +81,6 @@ describe("MainSearchGitHubName", () => {
         expect(screen.getByTestId("menus")).toBeInTheDocument();
     });
 
-    it("shows startState message on first visit when there are no results", () => {
-        mockState.results = {};
-
-        render(<MainSearchGitHubName />);
-
-        expect(screen.getByText("Start searching to see results")).toBeInTheDocument();
-        expect(screen.queryByTestId("dfw")).not.toBeInTheDocument();
-        expect(screen.queryByTestId("list-cards")).not.toBeInTheDocument();
-    });
-
 
 
     it("renders DataFetchingWrapper and ListCards when results exist", () => {
@@ -133,10 +123,5 @@ describe("MainSearchGitHubName", () => {
         // So we assert indirectly: when results exist, append is used.
     });
 
-    it("computes hasResults by checking results keys, not resultsOrder", () => {
-        // results exists but empty -> no wrapper
-        mockState.results = {};
-        render(<MainSearchGitHubName />);
-        expect(screen.queryByTestId("dfw")).not.toBeInTheDocument();
-    });
+   
 });

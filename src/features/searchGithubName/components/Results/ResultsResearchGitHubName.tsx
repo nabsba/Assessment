@@ -35,6 +35,8 @@ export default function ResultsResearchGitHubName() {
         return resultsCount > 0 && !!state.query && !!state.pagination?.hasNextPage && !state.loading;
     }, [state.resultsOrder?.length, state.query, state.pagination?.hasNextPage, state.loading]);
 
+
+
     return (
         <DataFetchingWrapper
             isLoading={state.loading}
@@ -44,16 +46,17 @@ export default function ResultsResearchGitHubName() {
             loadingMode={loadingMode}
             appendLoaderProps={{ type: LoaderType.CARDS }}
         >
-            <>
-                <ListCard />
-                <IntersectionObserverWrapper
-                    onVisible={handleEndReached}
-                    enabled={observerEnabled}
-                    options={{ root: null, rootMargin: '100px', threshold: 0.1 }}
-                >
-                    <div style={{ height: 1 }} />
-                </IntersectionObserverWrapper>
-            </>
+            {(!state.loading && !hasResults) && state.query ? <p> {content.mainListCard.emptyState}</p> :
+                <>
+                    <ListCard />
+                    <IntersectionObserverWrapper
+                        onVisible={handleEndReached}
+                        enabled={observerEnabled}
+                        options={{ root: null, rootMargin: '100px', threshold: 0.1 }}
+                    >
+                        <div style={{ height: 1 }} />
+                    </IntersectionObserverWrapper>
+                </>}
         </DataFetchingWrapper>
     );
 }

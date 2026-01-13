@@ -1,5 +1,4 @@
 
-import { useSearchContext } from '../hooks/gitHubContext/GitHubContext';
 import GitHubSearch from './GitHubSearchInput/GitHubSearchInput';
 import Header from './header/Header';
 import styles from './mainSearch.module.css';
@@ -8,12 +7,6 @@ import ResultsResearchGitHubName from './Results/ResultsResearchGitHubName';
 import WelcomeMessage from './WelcomeMessage/WelcomeMessage';
 
 export default function MainSearchGitHubName() {
-  const { state } = useSearchContext();
-
-  const hasResults = state.results && Object.keys(state.results).length > 0;
-
-
-
 
 
   return (
@@ -31,13 +24,9 @@ export default function MainSearchGitHubName() {
             <Menus />
           </div>
         </div>
-
+        <WelcomeMessage />
         <div className={styles.scrollableContent}>
-          {!hasResults && !state.loading ? (
-            <WelcomeMessage/>
-          ) : (
             <ResultsResearchGitHubName />
-          )}
         </div>
       </div>
     </>
