@@ -1,0 +1,57 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ErrorComponent > matches snapshot for 404 error 1`] = `
+<div>
+  <div
+    aria-live="assertive"
+    class="_errorContainer_771335 _404_771335 "
+    data-testid="error-404"
+    role="alert"
+  >
+    <div
+      aria-hidden="true"
+      class="_errorIcon_771335"
+    >
+      🔍
+    </div>
+    <h3
+      class="_errorTitle_771335"
+    >
+      Not Found
+    </h3>
+    <p
+      class="_errorMessage_771335"
+    >
+      The requested resource was not found.
+    </p>
+  </div>
+</div>
+`;
+
+exports[`ErrorComponent > matches snapshot for default error 1`] = `
+<div>
+  <div
+    aria-live="assertive"
+    class="_errorContainer_771335 _default_771335 "
+    data-testid="error-default"
+    role="alert"
+  >
+    <div
+      aria-hidden="true"
+      class="_errorIcon_771335"
+    >
+      ❌
+    </div>
+    <h3
+      class="_errorTitle_771335"
+    >
+      Error
+    </h3>
+    <p
+      class="_errorMessage_771335"
+    >
+      Something went wrong. Please try again.
+    </p>
+  </div>
+</div>
+`;
