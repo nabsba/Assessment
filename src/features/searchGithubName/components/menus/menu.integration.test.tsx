@@ -2,24 +2,25 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi, beforeEach, afterAll } from "vitest";
 import Menus from "./Menus";
 
-// Mock IconAction - update to handle JSX text
+// Mock IconAction
 vi.mock("../../../shared/components/iconAction/IconAction", () => ({
     default: ({ icon, onClick, text, disabled }: any) => {
-        // Handle JSX text by extracting text content
         let textContent = "";
+
         if (text && text.props && text.props.children) {
-            // Handle the <p><strong>...</strong>...</p> structure
             const children = text.props.children;
             if (Array.isArray(children)) {
-                textContent = children.map((child: any) => {
-                    if (typeof child === 'string') return child;
-                    if (child && child.props && child.props.children) return child.props.children;
-                    return '';
-                }).join('');
-            } else if (typeof children === 'string') {
+                textContent = children
+                    .map((child: any) => {
+                        if (typeof child === "string") return child;
+                        if (child && child.props && child.props.children) return child.props.children;
+                        return "";
+                    })
+                    .join("");
+            } else if (typeof children === "string") {
                 textContent = children;
             }
-        } else if (typeof text === 'string') {
+        } else if (typeof text === "string") {
             textContent = text;
         }
 
@@ -36,19 +37,14 @@ vi.mock("../../../shared/components/iconAction/IconAction", () => ({
     },
 }));
 
-// Mock Switch - fix the onChange handler
+// Mock Switch (calls onChange with boolean)
 vi.mock("../../../form/components/Switch", () => ({
     default: ({ checked, onChange, label, "data-testid": testId }: any) => (
         <button
             type="button"
             role="switch"
             aria-checked={checked}
-            onClick={() => {
-                // Call onChange with the new value (opposite of current)
-                if (onChange) {
-                    onChange(!checked);
-                }
-            }}
+            onClick={() => onChange?.(!checked)}
             data-testid={testId || "switch"}
             aria-label={label}
         >
@@ -62,25 +58,26 @@ vi.mock("../../../shared/components/animations/fadeIn/FadeAnimation", () => ({
     default: ({ children }: any) => <div>{children}</div>,
 }));
 
-// ✅ Mock content.json ONCE with all keys you use
+// Mock content.json
 vi.mock("../../data/content.json", () => ({
     default: {
         menu: {
             indiceSelection: "selection",
             indiceSelections: "selections",
             editModeLabel: "Edit Mode",
-            selectAll: "Select All" // Add missing key
+            selectAll: "Select All",
         },
     },
 }));
 
-// Mock context (mutable)
+// Mutable mock context
 let mockEditMode = false;
 
 const mockContext: any = {
     state: {
         selectedUsers: {},
-        results: [{ id: 1, name: "test" }] // Add results so Switch renders
+        results: { "1": { id: "1", name: "test" } },   // ✅ map
+        resultsOrder: ["1"],                            // ✅ order ids (needed for Switch render)
     },
     deleteUserSelection: vi.fn(),
     duplicateUserSelection: vi.fn(),
@@ -89,7 +86,7 @@ const mockContext: any = {
         mockEditMode = newValue;
         mockContext.editMode = newValue;
     }),
-    toggleSelectAllUsers: vi.fn(), // Add missing function
+    toggleSelectAllUsers: vi.fn(),
 };
 
 vi.mock("../../hooks/GitHubContext", () => ({
@@ -105,7 +102,8 @@ describe("Menus Component", () => {
 
         mockContext.state = {
             selectedUsers: {},
-            results: [{ id: 1, name: "test" }]
+            results: { "1": { id: "1", name: "test" } },
+            resultsOrder: ["1"],
         };
         mockContext.editMode = false;
 
@@ -113,10 +111,6 @@ describe("Menus Component", () => {
             mockEditMode = newValue;
             mockContext.editMode = newValue;
         });
-
-        mockContext.deleteUserSelection.mockClear();
-        mockContext.duplicateUserSelection.mockClear();
-        mockContext.toggleSelectAllUsers.mockClear();
     });
 
     afterAll(() => {
@@ -158,7 +152,7 @@ describe("Menus Component", () => {
 
     it("shows stackIcon when users are selected", () => {
         mockContext.editMode = true;
-        mockContext.state.selectedUsers = { user1: true };
+        mockContext.state.selectedUsers = { "1": true };
 
         render(<Menus />);
 
@@ -188,12 +182,13 @@ describe("Menus Component", () => {
         fireEvent.click(selectAllButton);
 
         expect(mockContext.toggleSelectAllUsers).toHaveBeenCalledTimes(1);
+        // When none selected, hasSelectedUsers=false => toggleSelectAllUsers(true)
         expect(mockContext.toggleSelectAllUsers).toHaveBeenCalledWith(true);
     });
 
     it("calls duplicateUserSelection when duplicate icon is clicked with users selected", () => {
         mockContext.editMode = true;
-        mockContext.state.selectedUsers = { user1: true };
+        mockContext.state.selectedUsers = { "1": true };
 
         render(<Menus />);
 
@@ -219,7 +214,7 @@ describe("Menus Component", () => {
 
     it("calls deleteUserSelection when bin icon is clicked with users selected", () => {
         mockContext.editMode = true;
-        mockContext.state.selectedUsers = { user1: true };
+        mockContext.state.selectedUsers = { "1": true };
 
         render(<Menus />);
 
@@ -246,5 +241,13 @@ describe("Menus Component", () => {
         const switchElement = screen.getByTestId("edit-mode-switch");
         expect(switchElement).toHaveAttribute("aria-label", "Edit Mode");
         expect(switchElement.textContent).toContain("Edit Mode");
+    });
+
+    it("does not render switch when resultsOrder is empty", () => {
+        mockContext.state.resultsOrder = [];
+
+        render(<Menus />);
+
+        expect(screen.queryByTestId("edit-mode-switch")).not.toBeInTheDocument();
     });
 });
