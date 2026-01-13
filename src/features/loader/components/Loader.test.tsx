@@ -1,8 +1,9 @@
+// test file
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import Loader, { LoaderType } from './Loader';
+import Loader, { LoaderType } from './Loader'; 
 
-// Mock CSS module if needed
+
 vi.mock('./Loader.module.css', () => ({
     default: {
         defaultLoader: 'defaultLoader',
@@ -19,7 +20,8 @@ describe('Loader', () => {
         expect(LoaderType).toEqual({
             DEFAULT: 'default',
             DOTS: 'dots',
-            BAR: 'bar'
+            BAR: 'bar',
+            CARDS: 'cards' 
         });
     });
 
@@ -27,7 +29,6 @@ describe('Loader', () => {
         const { container: withDefault } = render(<Loader />);
         const { container: withExplicit } = render(<Loader type={LoaderType.DEFAULT} />);
 
-        // Both should be identical
         expect(withDefault.innerHTML).toBe(withExplicit.innerHTML);
     });
 

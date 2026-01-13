@@ -1,8 +1,10 @@
 export const LoaderType = {
   DEFAULT: 'default',
   DOTS: 'dots',
-  BAR: 'bar'
+  BAR: 'bar',
+  CARDS:'cards'
 } as const;
+import FakeCardsLoader from './elements/FakeCardsLoader';
 import styles from './Loader.module.css';
 export type LoaderType = typeof LoaderType[keyof typeof LoaderType];
 
@@ -44,6 +46,10 @@ const Loader: React.FC<LoaderProps> = ({ type = LoaderType.DEFAULT }) => {
         <div className={styles.bar}></div>
       </div>
     ),
+    [LoaderType.CARDS]: (
+      <FakeCardsLoader />
+    ),
+    
   };
 
   return loaders[type];
