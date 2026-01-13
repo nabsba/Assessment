@@ -11,7 +11,7 @@ const baseState: SearchState = {
     resultsOrder: [],
     selectedUsers: {},
     notification: null,
-    apiLimitations: { remaining: null, rateLimit: null },
+    apiLimitations: { remaining: null, rateLimit: null, rateResetTime: null },
     pagination: {
         currentPage: 1,
         perPage: 10,
