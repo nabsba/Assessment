@@ -20,7 +20,7 @@ export default function Menus() {
         alignItems: 'center',
         marginBottom: '16px'
       }}>
-        {state.results && <Switch
+        {state.resultsOrder && state.resultsOrder.length > 0 &&  <Switch
           checked={editMode}
           onChange={handleEditModeChange}
           label={menu.editModeLabel}

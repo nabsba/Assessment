@@ -7,7 +7,7 @@ import ENDPOINTS from '../../../api/data/constant';
 type SearchState = {
     query: string;
     results: Record<number | string, UserGitHubProfile> | null;
-    // resultsOrder: UserGitHubProfile[] | null,
+    resultsOrder: string[] | null,
     loading: boolean;
     error: string | null;
     selectedUsers: Record<number, boolean>;
@@ -45,7 +45,9 @@ export interface UserGitHubProfile {
     type: string
     user_view_type: string
     site_admin: boolean
-    score: number
+    score: number,
+    isDuplicate?: boolean,
+    originalId?: number
 }
 
 interface SearchContextInterface {
@@ -69,15 +71,12 @@ const apiService = new ApiService();
 export const SearchProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [state, setState] = useState<SearchState>({
         query: '',
-        results: null,
-        // resultsOrder:null,
+        results: {},
+        resultsOrder: [],
         loading: false,
         error: null,
         selectedUsers: {},
-        apiLimitations: {
-            remaining: null,
-            rateLimit: null,
-        },
+        apiLimitations: { remaining: null, rateLimit: null },
         notification: null,
         pagination: {
             currentPage: 1,
@@ -88,6 +87,7 @@ export const SearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             totalPages: 0,
         }
     });
+
     const [editMode, setEditMode] = useState(false);
     const handleEditModeChange = () => {
         setEditMode(!editMode);
@@ -98,47 +98,56 @@ export const SearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }, []);
     const searchUsers = useCallback(async (query: string, page: number = 1) => {
         if (!query.trim()) {
-            setState(prev => ({ ...prev, results: {}, error: null }));
+            setState(prev => ({ ...prev, results: {}, resultsOrder: [], error: null }));
             return;
         }
 
-        const isNewSearch = page === 1; 
+        const isNewSearch = page === 1;
+
         if (abortControllerRef.current) {
             abortControllerRef.current.abort();
         }
-
         abortControllerRef.current = new AbortController();
 
         setState(prev => ({
             ...prev,
-            query:query,
+            query,
             loading: true,
             error: null,
-            ...(isNewSearch && { results: {} })
+            ...(isNewSearch && { results: {}, resultsOrder: [] }),
         }));
 
         try {
             const response = await apiService.get(
                 `${ENDPOINTS.GITHUB.SEARCH_USER}users?q=${encodeURIComponent(query)}&per_page=30&page=${page}`,
                 {
-                    headers: {
-                        'Accept': 'application/vnd.github.v3+json',
-                    },
+                    headers: { Accept: 'application/vnd.github.v3+json' },
                     signal: abortControllerRef.current.signal,
                     timeout: 10000,
                 }
             );
 
             setState(prev => {
-                const items = response.data.items || [];
+                const items: UserGitHubProfile[] = response.data.items || [];
                 const totalCount = response.data.total_count || 0;
-                const resultsMap = isNewSearch ? {} : { ...prev.results }; // Garde les anciens si page > 1
-                // const resultsOrder = isNewSearch ? [] : [...(prev.resultsOrder || [])]; // Garde l'ordre existant
 
-                items.forEach((user: UserGitHubProfile) => {
-                    resultsMap[user.id] = user;
-                    // resultsOrder.push(user.id);
-                });
+                const resultsMap: Record<string, UserGitHubProfile> = isNewSearch
+                    ? {}
+                    : { ...(prev.results || {}) };
+
+                const resultsOrder: string[] = isNewSearch
+                    ? []
+                    : [...(prev.resultsOrder || []).map(String)];
+
+                for (const user of items) {
+                    const id = String(user.id);
+
+                    if (!resultsMap[id]) {
+                        resultsOrder.push(id); // keep order only once
+                    }
+
+                    resultsMap[id] = user; // always update map
+                }
 
                 const totalPages = Math.ceil(totalCount / prev.pagination.perPage);
                 const hasNextPage = page < totalPages;
@@ -146,105 +155,108 @@ export const SearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                 return {
                     ...prev,
                     results: resultsMap,
-                    // resultsOrder: resultsOrder,
+                    resultsOrder,
                     loading: false,
                     error: null,
                     apiLimitations: {
-                        remaining: response.headers['x-ratelimit-remaining'] ?
-                            parseInt(response.headers['x-ratelimit-remaining']) : null,
-                        rateLimit: response.headers['x-ratelimit-limit'] ?
-                            parseInt(response.headers['x-ratelimit-limit']) : null,
+                        remaining: response.headers['x-ratelimit-remaining']
+                            ? parseInt(response.headers['x-ratelimit-remaining'])
+                            : null,
+                        rateLimit: response.headers['x-ratelimit-limit']
+                            ? parseInt(response.headers['x-ratelimit-limit'])
+                            : null,
                     },
                     pagination: {
                         ...prev.pagination,
                         currentPage: page,
                         totalItems: totalCount,
-                        totalPages: totalPages,
-                        hasNextPage: hasNextPage,
-                        hasPreviousPage: page > 1
-                    }
+                        totalPages,
+                        hasNextPage,
+                        hasPreviousPage: page > 1,
+                    },
                 };
             });
         } catch (error: any) {
-            if (error.name === 'AbortError' || error.message?.includes('aborted')) {
-                return;
-            }
+            if (error.name === 'AbortError' || error.message?.includes('aborted')) return;
 
             setState(prev => ({
                 ...prev,
                 loading: false,
                 error: error.message || 'Failed to search users',
-                results: isNewSearch ? {} : prev.results, // Garde les anciens résultats si erreur sur page > 1
+                results: isNewSearch ? {} : prev.results,
+                resultsOrder: isNewSearch ? [] : prev.resultsOrder, // keep order if paging fails
                 pagination: {
                     ...prev.pagination,
-                    currentPage: isNewSearch ? 1 : prev.pagination.currentPage
-                }
+                    currentPage: isNewSearch ? 1 : prev.pagination.currentPage,
+                },
             }));
         }
     }, []);
+
     const deleteUserSelection = useCallback(() => {
         setState(prev => {
-            if (Object.keys(prev.selectedUsers).length === 0) {
-                return prev;
-            }
+            const selectedIds = new Set(Object.keys(prev.selectedUsers));
+            if (selectedIds.size === 0) return prev;
 
-            const selectedUserIds = Object.keys(prev.selectedUsers);
             const updatedResults = { ...prev.results };
+            selectedIds.forEach(id => delete updatedResults[id]);
 
-            selectedUserIds.forEach(id => {
-                delete updatedResults[id];
-            });
+            const updatedOrder = prev.resultsOrder!.filter(
+                id => !selectedIds.has(String(id))
+            );
 
             return {
                 ...prev,
-                selectedUsers: {},
                 results: updatedResults,
+                resultsOrder: updatedOrder as string[],
+                selectedUsers: {},
             };
         });
     }, []);
+
     const duplicateUserSelection = useCallback(() => {
         setState(prev => {
-            if (Object.keys(prev.selectedUsers).length === 0) {
-                return prev;
+            const selectedSet = new Set(Object.keys(prev.selectedUsers));
+            if (selectedSet.size === 0 || !prev.results || !prev.resultsOrder) return prev;
+
+            const updatedResults: Record<string, UserGitHubProfile> = {
+                ...(prev.results as Record<string, UserGitHubProfile>),
+            };
+
+            const updatedOrder: string[] = [];
+
+            for (const rawId of prev.resultsOrder as Array<number | string>) {
+                const id = String(rawId);
+
+                updatedOrder.push(id);
+
+                if (!selectedSet.has(id)) continue;
+
+                const original = updatedResults[id];
+                if (!original || original.isDuplicate) continue;
+
+                const duplicateId = `${id}_copy`;
+                if (updatedResults[duplicateId]) continue;
+
+                updatedResults[duplicateId] = {
+                    ...original,
+                    id: duplicateId,
+                    isDuplicate: true,
+                    originalId: original.originalId ?? original.id as number,
+                };
+
+                updatedOrder.push(duplicateId);
             }
-
-            if (!prev.results) {
-                return prev;
-            }
-
-            const selectedUserIds = Object.keys(prev.selectedUsers);
-            const updatedResults = { ...prev.results };
-
-            selectedUserIds.forEach(id => {
-                const originalUser = prev.results![parseInt(id)];
-                if (originalUser) {
-
-                    const duplicateId = `${originalUser.id}_copy`;
-
-                    if (updatedResults[duplicateId]) {
-                        console.log(`Duplicate ${duplicateId} already exists, skipping`);
-                        return; // Skip - duplicate already exists
-                    }
-
-                    const duplicate = {
-                        ...originalUser,
-                        id: duplicateId, // String ID: "1_copy"
-                        login: `${originalUser.login}`,
-                        isDuplicate: true,
-                        originalId: originalUser.id,
-                    };
-
-
-                    updatedResults[duplicateId] = duplicate;
-                }
-            });
 
             return {
                 ...prev,
                 results: updatedResults,
+                resultsOrder: updatedOrder,
             };
         });
     }, []);
+
+
     const toggleUserSelection = useCallback((userId: number) => {
         setState(prev => {
             const isSelected = prev.selectedUsers[userId];

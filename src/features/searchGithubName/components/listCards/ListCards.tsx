@@ -1,79 +1,49 @@
+import { useCallback, useEffect, useRef, useState } from 'react'
 import content from '../../data/content.json'
+import { useSearchContext } from '../../hooks/GitHubContext'
+import type { ContentConfig } from '../../types/content.types'
 import Card from './Card'
 import styles from './MainListCard.module.css'
-import type { ContentConfig } from '../../types/content.types'
-import { useSearchContext, type UserGitHubProfile } from '../../hooks/GitHubContext'
-import { useEffect, useMemo, useState, useCallback, useRef } from 'react'
 
 export default function ListCard() {
   const { card, mainListCard } = content as ContentConfig;
   const { state, searchUsers } = useSearchContext();
   const [isFirstVisit, setIsFirstVisit] = useState(true);
 
-
   const lastCardRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
-  const resultsArray = useMemo(() => {
-    return state.results
-      ? Object.values(state.results)
-      : [];
-  }, [state.results]);
+
+  const resultsArray = state.resultsOrder || []; // ids
 
   const handleEndReached = useCallback(() => {
     const { query, pagination, loading } = state;
+    if (!query || !pagination.hasNextPage || loading) return;
 
-    if (!query || !pagination.hasNextPage || loading) {
-
-      return;
-    }
-
-    const nextPage = pagination.currentPage + 1;
-
-
-    searchUsers(query, nextPage);
-  }, [state.query, state.pagination, state.loading, searchUsers]);
+    searchUsers(query, pagination.currentPage + 1);
+  }, [state, searchUsers]);
 
   useEffect(() => {
     if (!lastCardRef.current || resultsArray.length === 0) return;
 
-
-    if (observerRef.current) {
-      observerRef.current.disconnect();
-    }
-
+    observerRef.current?.disconnect();
 
     observerRef.current = new IntersectionObserver(
       (entries) => {
-        const [entry] = entries;
-        if (entry.isIntersecting) {
-          handleEndReached();
-        }
+        if (entries[0]?.isIntersecting) handleEndReached();
       },
-      {
-        root: null, 
-        rootMargin: '100px', 
-        threshold: 0.1 
-      }
+      { root: null, rootMargin: '100px', threshold: 0.1 }
     );
-
 
     observerRef.current.observe(lastCardRef.current);
 
-
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
-    };
+    return () => observerRef.current?.disconnect();
   }, [resultsArray.length, handleEndReached]);
-
 
   useEffect(() => {
     if (state.results && Object.keys(state.results).length > 0) {
       setIsFirstVisit(false);
     }
   }, [state.results]);
-
 
   if (!state.results || resultsArray.length === 0) {
     return (
@@ -86,28 +56,28 @@ export default function ListCard() {
   return (
     <div className={styles.container}>
       <div className={styles.cardGrid}>
-        {resultsArray.map((user: UserGitHubProfile, index) => {
+        {resultsArray.map((userId: number | string, index) => {
           const isLastCard = index === resultsArray.length - 1;
+
+          const user = state.results?.[String(userId)];
+          if (!user) return null; 
 
           return (
             <div
-              key={user.id}
+              key={String(userId)}
               ref={isLastCard ? lastCardRef : null}
               className={styles.cardWrapper}
               data-is-last={isLastCard}
             >
               <Card
                 user={user}
-                onButtonClick={() =>console.log('not imlemented')}
+                onButtonClick={() => console.log('not implemented')}
                 buttonText={card.button.text}
               />
-
-         
             </div>
           );
         })}
       </div>
-
     </div>
   );
 }
