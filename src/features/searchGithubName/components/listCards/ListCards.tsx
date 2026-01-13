@@ -20,6 +20,7 @@ export default function ListCard() {
 
     if (apiLimitations.remaining === 0) {
       showNotification(content.searchInput.notifications.rateLimitExceeded, 6000);
+      return;
     }
 
     if (state.apiLimitations.remaining && state.apiLimitations.remaining <= 2) {
