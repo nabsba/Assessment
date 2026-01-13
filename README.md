@@ -43,4 +43,6 @@ npm run dev
 npm run test
 
 
-
+> **Note on AI Usage**  
+> AI tools were utilised to support test creation, documentation preparation, and the development of selected functions and components.  
+> All architectural decisions, state management design, data structure, and UI/UX patterns were designed and implemented by me.
