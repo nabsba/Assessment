@@ -32,6 +32,10 @@ const GitHubSearch: React.FC = () => {
         const isDeleting = value.length < prevValueRef.current.length;
         prevValueRef.current = value;
         setInputValue(value);
+
+        if (state.query === value.trim()) {
+            return;
+        }
         abortSearch();
         debouncedSearchTyping.current.cancel?.();
         debouncedSearchDeleting.current.cancel?.();
