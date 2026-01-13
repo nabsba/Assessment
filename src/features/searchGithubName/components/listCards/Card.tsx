@@ -26,14 +26,14 @@ export default function Card({
   const { card } = content as ContentConfig;
   const { state, toggleUserSelection, editMode } = useSearchContext();
 
-  const isSelected = Boolean(state.selectedUsers[user.id]);
+  const isSelected = Boolean(state.selectedUsers[user.id as unknown as number]);
 
   return (
     <div className={`${styles.card} ${className}`}>
       {editMode  && <div className={styles.checkboxWrapper}>
         <Checkbox
           checked={isSelected}
-          onChange={() => toggleUserSelection(user.id)}
+          onChange={() => toggleUserSelection(user.id as unknown as number)}
           text={card.checkbox.text}
         />
       </div>}
@@ -48,7 +48,7 @@ export default function Card({
         <Identity id={user.id} login={user.login} />
         <ButtonV1
           text={buttonText || card.button.text}
-          onClick={() => onButtonClick(user.id)}
+          onClick={() => onButtonClick(user.id as unknown as number)}
           className="primary-btn"
         />
       </div>
