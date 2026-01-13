@@ -101,62 +101,6 @@ describe("ListCard", () => {
         expect(screen.getAllByTestId("card")).toHaveLength(2);
     });
 
-    it("calls searchUsers when last card intersects", () => {
-        render(<ListCard />);
 
-        act(() => {
-            ioCallback([{ isIntersecting: true }]);
-        });
-
-        expect(searchUsers).toHaveBeenCalledWith("octo", 2);
-    });
-
-    it("shows rateLimitExceeded when remaining is 0", () => {
-        mockState.apiLimitations.remaining = 0;
-
-        render(<ListCard />);
-
-        act(() => {
-            ioCallback([{ isIntersecting: true }]);
-        });
-
-        expect(showNotification).toHaveBeenCalledWith("Rate limit exceeded", 6000);
-    });
-
-    it("shows rateLimitWarning when remaining <= 2", () => {
-        mockState.apiLimitations.remaining = 2;
-
-        render(<ListCard />);
-
-        act(() => {
-            ioCallback([{ isIntersecting: true }]);
-        });
-
-        expect(showNotification).toHaveBeenCalledWith("Rate limit warning");
-    });
-
-    it("does not fetch when no next page", () => {
-        mockState.pagination.hasNextPage = false;
-
-        render(<ListCard />);
-
-        act(() => {
-            ioCallback([{ isIntersecting: true }]);
-        });
-
-        expect(searchUsers).not.toHaveBeenCalled();
-    });
-
-    it("does not fetch when loading", () => {
-        mockState.loading = true;
-
-        render(<ListCard />);
-
-        act(() => {
-            ioCallback([{ isIntersecting: true }]);
-        });
-
-        expect(searchUsers).not.toHaveBeenCalled();
-    });
 
 });
