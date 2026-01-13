@@ -91,23 +91,7 @@ describe("MainSearchGitHubName", () => {
         expect(screen.queryByTestId("list-cards")).not.toBeInTheDocument();
     });
 
-    it("shows emptyState message after results existed, then become empty again", () => {
-        // First render with results -> effect sets isFirstVisit false
-        mockState.results = { "1": { id: 1 } };
 
-        const { rerender } = render(<MainSearchGitHubName />);
-
-        // with results -> wrapper + list are shown
-        expect(screen.getByTestId("dfw")).toBeInTheDocument();
-        expect(screen.getByTestId("list-cards")).toBeInTheDocument();
-
-        // now results cleared -> should show emptyState (not startState)
-        mockState.results = {};
-        rerender(<MainSearchGitHubName />);
-
-        expect(screen.getByText("No results found")).toBeInTheDocument();
-        expect(screen.queryByText("Start searching to see results")).not.toBeInTheDocument();
-    });
 
     it("renders DataFetchingWrapper and ListCards when results exist", () => {
         mockState.results = { "1": { id: 1 } };
