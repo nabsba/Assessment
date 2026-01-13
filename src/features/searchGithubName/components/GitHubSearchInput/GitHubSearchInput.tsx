@@ -6,32 +6,32 @@ import type { ContentConfig } from '../../types/content.types';
 import content from '../../data/content.json'
 
 const GitHubSearch: React.FC = () => {
-    const { searchUsers } = useSearchContext();
+    const { searchUsers, abortSearch } = useSearchContext();
     const [inputValue, setInputValue] = useState('');
   const {  searchInput } = content as ContentConfig;
 
     const debouncedSearchRef = useRef(
         createDebouncedSearch(searchUsers, {
-            debounceDelay: 600,
+            debounceDelay: 1500,
             minLength: 2,
             maxLength: 50,
-        })
-        
+        })    
     );
 
     const handleInputChange = useCallback((value: string) => {
         setInputValue(value);
+        abortSearch();
         debouncedSearchRef.current(value);
-    }, []);
+    }, [abortSearch]);
 
     return (
-        <div>
+
             <SearchInput
                 value={inputValue}
                 onChange={handleInputChange}
                 className='main-search-GitHubName'  placeholder={searchInput.placeholder}
             />
-        </div>
+ 
     );
 };
 

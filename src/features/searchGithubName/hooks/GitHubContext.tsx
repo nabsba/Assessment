@@ -113,9 +113,11 @@ const handleEditModeChange = () => {
                 };
             });
         } catch (error: any) {
-            if (error.name === 'AbortError') {
+
+            if (error.name === 'AbortError' || error.message?.includes('aborted')) {
                 return;
             }
+
 
             setState(prev => ({
                 ...prev,
@@ -135,7 +137,6 @@ const handleEditModeChange = () => {
             const updatedResults = { ...prev.results };
 
             selectedUserIds.forEach(id => {
-                // Don't use parseInt() - delete by the actual ID (which could be string like "1_copy")
                 delete updatedResults[id];
             });
 
@@ -195,9 +196,9 @@ const handleEditModeChange = () => {
             const updatedUsers = { ...prev.selectedUsers };
 
             if (isSelected) {
-                delete updatedUsers[userId]; // Suppression
+                delete updatedUsers[userId]; 
             } else {
-                updatedUsers[userId] = true; // Ajout
+                updatedUsers[userId] = true; 
             }
 
             return {
