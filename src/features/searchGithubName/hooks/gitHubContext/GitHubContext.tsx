@@ -89,9 +89,6 @@ export const SearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         dispatch({ type: "DELETE_SELECTED" });
     }, []);
 
-    const duplicateUserSelection = useCallback(() => {
-        dispatch({ type: "DUPLICATE_SELECTED" });
-    }, []);
 
     const clearResults = useCallback(() => {
         dispatch({ type: "CLEAR_RESULTS" });
@@ -109,7 +106,12 @@ export const SearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             dispatch({ type: "SHOW_NOTIFICATION", message: null });
         };
     }, []);
-
+    const duplicateUserSelection = useCallback(() => {
+        dispatch({
+            type: "DUPLICATE_SELECTED",
+            showNotification
+        });
+    }, [showNotification]);
     return (
         <SearchContext.Provider
             value={{

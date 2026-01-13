@@ -21,7 +21,7 @@ export type SearchAction =
     | { type: "TOGGLE_USER"; userId: number | string }
     | { type: "SELECT_ALL"; selectAll: boolean }
     | { type: "DELETE_SELECTED" }
-    | { type: "DUPLICATE_SELECTED" }
+    | { type: "DUPLICATE_SELECTED"; showNotification: (msg: string, duration?: number) => () => void } // NEW: pass showNotification
     | { type: "SHOW_NOTIFICATION"; message: string | null };
 
 export function searchReducer(state: SearchState, action: SearchAction): SearchState {
@@ -103,9 +103,28 @@ export function searchReducer(state: SearchState, action: SearchAction): SearchS
         }
 
         case "DUPLICATE_SELECTED": {
-            const { results, order, alreadyHasDuplicates  } = duplicateSelectedInOrder(state.results, state.resultsOrder, state.selectedUsers);
-            console.log(alreadyHasDuplicates)
-            return { ...state, results, resultsOrder: order };
+            const { results, order, alreadyHasDuplicates } = duplicateSelectedInOrder(
+                state.results,
+                state.resultsOrder,
+                state.selectedUsers
+            );
+
+            // Show notification if duplicates already exist
+            if (alreadyHasDuplicates) {
+                const selectedCount = Object.keys(state.selectedUsers).length;
+                action.showNotification?.(
+                    selectedCount === 1
+                        ? "This user is already duplicated"
+                        : "Some selected users are already duplicated",
+                    3000
+                );
+            }
+
+            return {
+                ...state,
+                results,
+                resultsOrder: order,
+            };
         }
 
         case "SHOW_NOTIFICATION":
