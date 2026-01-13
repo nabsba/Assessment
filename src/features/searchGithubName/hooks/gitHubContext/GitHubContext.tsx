@@ -51,6 +51,13 @@ export const SearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             const items = response.data.items || [];
             const totalCount = response.data.total_count || 0;
 
+            const remaining = response.headers["x-ratelimit-remaining"]
+                ? parseInt(response.headers["x-ratelimit-remaining"], 10)
+                : null;
+            const rateResetTime = response.headers["x-ratelimit-reset"]
+                ? parseInt(response.headers["x-ratelimit-reset"], 10)
+                : null;
+
             dispatch({
                 type: "SEARCH_SUCCESS",
                 items,
@@ -58,14 +65,33 @@ export const SearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                 page,
                 isNewSearch,
                 apiLimitations: {
-                    remaining: response.headers["x-ratelimit-remaining"]
-                        ? parseInt(response.headers["x-ratelimit-remaining"], 10)
-                        : null,
+                    remaining,
                     rateLimit: response.headers["x-ratelimit-limit"]
                         ? parseInt(response.headers["x-ratelimit-limit"], 10)
                         : null,
+                    rateResetTime,
                 },
             });
+
+            // Check if remaining is 9 and we have a reset time
+            if (remaining === 9 && rateResetTime) {
+                const now = Math.floor(Date.now() / 1000); // Current time in seconds
+                const resetInSeconds = rateResetTime - now;
+
+                if (resetInSeconds > 0) {
+                    setTimeout(() => {
+                        dispatch({
+                            type: "UPDATE_API_LIMITS",
+                            apiLimitations: {
+                                remaining: state.apiLimitations.rateLimit,
+                                rateResetTime: null, 
+                                rateLimit: null
+                            },
+                        });
+                    }, resetInSeconds * 1000);
+                }
+            }
+
         } catch (error: any) {
             if (error.name === "AbortError" || error.message?.includes("aborted")) return;
 

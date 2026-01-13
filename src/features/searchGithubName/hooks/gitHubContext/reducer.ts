@@ -2,7 +2,7 @@ import type { SearchState, UserGitHubProfile } from "../../types/content.types";
 import { deleteSelected, duplicateSelectedInOrder, mergeSearchResults, toId } from "../../utils/searchUtils";
 
 
-type ApiLimits = { remaining: number | null; rateLimit: number | null };
+type ApiLimits = { remaining: number | null; rateLimit: number | null, rateResetTime: number | null };
 
 export type SearchAction =
     | { type: "SET_QUERY"; query: string }
@@ -21,9 +21,9 @@ export type SearchAction =
     | { type: "TOGGLE_USER"; userId: number | string }
     | { type: "SELECT_ALL"; selectAll: boolean }
     | { type: "DELETE_SELECTED" }
-    | { type: "DUPLICATE_SELECTED"; showNotification: (msg: string, duration?: number) => () => void } // NEW: pass showNotification
-    | { type: "SHOW_NOTIFICATION"; message: string | null };
-
+    | { type: "DUPLICATE_SELECTED"; showNotification: (msg: string, duration?: number) => () => void }
+    | { type: "SHOW_NOTIFICATION"; message: string | null }
+    | { type: "UPDATE_API_LIMITS"; apiLimitations: Partial<ApiLimits> }; // Added this line
 export function searchReducer(state: SearchState, action: SearchAction): SearchState {
     switch (action.type) {
         case "SET_QUERY":
@@ -129,7 +129,14 @@ export function searchReducer(state: SearchState, action: SearchAction): SearchS
 
         case "SHOW_NOTIFICATION":
             return { ...state, notification: action.message };
-
+        case "UPDATE_API_LIMITS":
+            return {
+                ...state,
+                apiLimitations: {
+                    ...state.apiLimitations,
+                    ...action.apiLimitations,
+                },
+            };
         default:
             return state;
     }

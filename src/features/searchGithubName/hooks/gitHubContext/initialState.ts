@@ -8,7 +8,7 @@ export const initialSearchState: SearchState = {
     loading: false,
     error: null,
     selectedUsers: {},
-    apiLimitations: { remaining: null, rateLimit: null },
+    apiLimitations: { remaining: null, rateLimit: null, rateResetTime: null },
     notification: null,
     pagination: {
         currentPage: 1,

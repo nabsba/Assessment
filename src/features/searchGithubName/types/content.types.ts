@@ -69,7 +69,7 @@ export type SearchState = {
     loading: boolean;
     error: string | null;
     selectedUsers: Record<string, boolean>;
-    apiLimitations: { remaining: number | null; rateLimit: number | null };
+    apiLimitations: { remaining: number | null; rateLimit: number | null, rateResetTime: number | null };
     notification: string | null;
     pagination: {
         currentPage: number;
