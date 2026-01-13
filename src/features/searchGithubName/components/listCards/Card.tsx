@@ -5,7 +5,7 @@ import content from '../../data/content.json'
 import styles from './Card.module.css'
 import ButtonV1 from '../../../shared/components/buttons/ButtonV1'
 import type { ContentConfig, UserGitHubProfile } from '../../types/content.types'
-import { useSearchContext } from '../../hooks/GitHubContext'
+import { useSearchContext } from '../../hooks/gitHubContext/GitHubContext'
 import { useEditModeContext } from '../../hooks/EditContext'
 
 interface CardProps {

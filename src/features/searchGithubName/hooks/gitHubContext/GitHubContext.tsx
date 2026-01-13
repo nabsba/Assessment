@@ -1,10 +1,10 @@
 import React, { createContext, useCallback, useContext, useRef, useReducer } from "react";
-import { ApiService } from "../../../api/logic/api";
-import ENDPOINTS from "../../../api/data/constant";
+import { ApiService } from "../../../../api/logic/api";
+import ENDPOINTS from "../../../../api/data/constant";
 
 import { initialSearchState } from "./initialState";
 import { searchReducer } from "./reducer";
-import type { SearchContextInterface } from "../types/content.types";
+import type { SearchContextInterface } from "../../types/content.types";
 
 const SearchContext = createContext<SearchContextInterface | undefined>(undefined);
 const apiService = new ApiService();

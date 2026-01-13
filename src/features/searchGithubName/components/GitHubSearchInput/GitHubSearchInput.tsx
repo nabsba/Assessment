@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useRef } from 'react';
 import { createDebouncedSearch } from '../../utils/searchUtils';
-import { useSearchContext } from '../../hooks/GitHubContext';
+import { useSearchContext } from '../../hooks/gitHubContext/GitHubContext';
 import SearchInput from '../../../form/components/SearchInput';
 import type { ContentConfig } from '../../types/content.types';
 import content from '../../data/content.json'

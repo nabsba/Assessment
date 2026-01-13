@@ -1,7 +1,7 @@
 import './App.css'
 import MainSearchGitHubName from './features/searchGithubName/components/MainSearchGitHubName'
 import { EditModeProvider } from './features/searchGithubName/hooks/EditContext'
-import { SearchProvider } from './features/searchGithubName/hooks/GitHubContext'
+import { SearchProvider } from './features/searchGithubName/hooks/gitHubContext/GitHubContext'
 
 
 function App() {

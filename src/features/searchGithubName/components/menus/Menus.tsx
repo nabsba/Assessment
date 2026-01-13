@@ -1,6 +1,6 @@
 
 import IconAction from '../../../shared/components/iconAction/IconAction';
-import { useSearchContext } from '../../hooks/GitHubContext';
+import { useSearchContext } from '../../hooks/gitHubContext/GitHubContext';
 import Switch from '../../../form/components/Switch';
 import content from '../../data/content.json'
 import type { ContentConfig } from '../../types/content.types'

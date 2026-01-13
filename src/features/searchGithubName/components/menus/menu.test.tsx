@@ -89,7 +89,7 @@ const mockSearchContext: any = {
     toggleSelectAllUsers: vi.fn(),
 };
 
-vi.mock("../../hooks/GitHubContext", () => ({
+vi.mock("../../hooks/gitHubContext/GitHubContext", () => ({
     useSearchContext: vi.fn(() => mockSearchContext),
 }));
 

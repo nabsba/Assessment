@@ -1,4 +1,4 @@
-import type { SearchState } from "../types/content.types";
+import type { SearchState } from "../../types/content.types";
 
 
 export const initialSearchState: SearchState = {

@@ -6,7 +6,7 @@ import styles from './mainSearch.module.css';
 import { ErrorType } from '../../error/components/ErrorComponent'
 import { LoaderType } from '../../loader/components/Loader'
 import DataFetchingWrapper from '../../shared/components/DataFetchingWrapper'
-import { useSearchContext } from '../hooks/GitHubContext'
+import { useSearchContext } from '../hooks/gitHubContext/GitHubContext'
 import GitHubSearch from './GitHubSearchInput/GitHubSearchInput'
 import { useState, useEffect } from 'react'
 import type { ContentConfig } from '../types/content.types'

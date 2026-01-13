@@ -1,7 +1,7 @@
 // ListCards.tsx
 import { useCallback, useEffect, useRef } from 'react'
 import content from '../../data/content.json'
-import { useSearchContext } from '../../hooks/GitHubContext'
+import { useSearchContext } from '../../hooks/gitHubContext/GitHubContext'
 import type { ContentConfig } from '../../types/content.types'
 import Card from './Card'
 import styles from './MainListCard.module.css'

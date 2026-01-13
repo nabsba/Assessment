@@ -1,5 +1,5 @@
-import type { SearchState, UserGitHubProfile } from "../types/content.types";
-import { deleteSelected, duplicateSelectedInOrder, mergeSearchResults, toId } from "../utils/searchUtils";
+import type { SearchState, UserGitHubProfile } from "../../types/content.types";
+import { deleteSelected, duplicateSelectedInOrder, mergeSearchResults, toId } from "../../utils/searchUtils";
 
 
 type ApiLimits = { remaining: number | null; rateLimit: number | null };
